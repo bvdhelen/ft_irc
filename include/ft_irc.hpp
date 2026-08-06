@@ -33,4 +33,7 @@
 #include <vector>
 #include <map>
 
+//std::strtol()
+#include <cstdlib>
+
 #endif

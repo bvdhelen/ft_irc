@@ -28,7 +28,6 @@ class Client
         std::set<Channel *> _channels;
 
     public:
-        Client();
         Client(int socket);
         ~Client();
 

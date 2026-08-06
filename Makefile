@@ -1,5 +1,5 @@
 # Nombre del programa
-NAME = ft_irc
+NAME = ircserv
 
 # Compilador y banderas de compilación
 CXX = c++
@@ -36,7 +36,7 @@ $(NAME): $(OBJS)
 
 $(OBJ_DIR)/%.o: %.cpp
 	@mkdir -p $(dir $@)
-	$(CXX) $(CXXFLAGS) -c $< -o $@
+	$(CXX) $(CXXFLAGS) $(INCLUDES) -c $< -o $@
 
 clean:
 	@rm -rf $(OBJ_DIR)
