@@ -35,9 +35,9 @@ class Server
 		//Bucle principal
 		void run();
 
-		Client *getClientBySocket(int socket) const;
-		Client *getClientByNick(const std::string &nickToSearch) const;
-		Channel *getChannelByName(const std::string &name) const;
+		Client *getClientBySocket(int socket);
+		Client *getClientByNick(const std::string &nickToSearch);
+		Channel *getChannelByName(const std::string &name);
 
 		// void acceptClient(); //nuevo cliente
 		// void disconnectClient(int fd); //desconectar cliente

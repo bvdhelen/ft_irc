@@ -60,9 +60,9 @@ class Client
         void clearBuffer();
 
         // Channels
-        void addChannel(const Channel *channel);
-        void removeChannel(const Channel *channel);
-        bool isInChannel(const Channel *channel) const;
+        void addChannel(Channel *channel);
+        void removeChannel(Channel *channel);
+        bool isInChannel(Channel *channel) const;
 
 };
 

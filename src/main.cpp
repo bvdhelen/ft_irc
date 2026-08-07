@@ -14,9 +14,9 @@ int main(int argc, char **argv)
         std::cerr << "Error: invalid port." << std::endl;
         return 1;
     }
-    if (port <= 0 || port > 65535)
+    if (port < 1024 || port > 65535)
     {
-        std::cerr << "Error: port must be a number in the range [1, 65535]."<< std::endl;
+        std::cerr << "Error: port must be a number in the range [1024, 65535]."<< std::endl;
         return 1;
     }
     std::string password = argv[2];
