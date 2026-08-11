@@ -45,7 +45,7 @@ class Client
         const std::set<Channel *> &getChannels() const;
 
         //Setters
-        void setFd(int socket);
+        void setSocket(int socket);
         void setNickname(const std::string &nickname);
         void setUsername(const std::string &username);
         void setRealname(const std::string &realname);
