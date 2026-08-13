@@ -123,6 +123,26 @@ void Client::clearBuffer()
     _buffer.clear();
 }
 
+bool Client::hasCommandBuffer() const
+{
+    return _buffer.find("\r\n") != std::string::npos;
+}
+
+std::string Client::getCommandFromBuffer()
+{
+    std::string::size_type end;
+
+    end = _buffer.find("\r\n");
+
+    if (end == std::string::npos)
+        return "";
+
+    std::string command = _buffer.substr(0, end);
+    _buffer.erase(0, end + 2);
+
+    return command;
+}
+
 // Channels
 void Client::addChannel(Channel *channel)
 {

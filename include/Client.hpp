@@ -58,6 +58,8 @@ class Client
         //Buffer
         void appendBuffer(const std::string &data);
         void clearBuffer();
+        bool hasCommandBuffer() const;
+        std::string getCommandFromBuffer();
 
         // Channels
         void addChannel(Channel *channel);
