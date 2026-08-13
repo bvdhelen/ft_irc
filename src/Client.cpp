@@ -1,4 +1,5 @@
 #include "Client.hpp"
+#include "Channel.hpp"
 
 // Constructor
 Client::Client(int socket)
@@ -19,6 +20,7 @@ Client::~Client()
 {
 }
 
+// Getters
 int Client::getSocket() const
 {
     return _socket;
@@ -125,11 +127,14 @@ void Client::clearBuffer()
 void Client::addChannel(Channel *channel)
 {
     _channels.insert(channel);
+    channel->addClient(this);
 }
 
 void Client::removeChannel(Channel *channel)
 {
     _channels.erase(channel);
+    channel->removeClient(this);
+    channel->removeOperator(this);
 }
 
 bool Client::isInChannel(Channel *channel) const
