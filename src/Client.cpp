@@ -71,7 +71,7 @@ const std::set<Channel *> &Client::getChannels() const
     return _channels;
 }
 
-//Setters
+// Setters
 void Client::setSocket(int socket)
 {
     _socket = socket;
@@ -112,7 +112,7 @@ void Client::setAuthenticated(bool value)
     _authenticated = value;
 }
 
-//Buffer
+// Buffer
 void Client::appendBuffer(const std::string &data)
 {
     _buffer += data;
@@ -139,11 +139,5 @@ void Client::removeChannel(Channel *channel)
 
 bool Client::isInChannel(Channel *channel) const
 {
-    std::set<Channel *>::const_iterator it;
-
-    it = _channels.find(channel);
-
-    if (it != _channels.end())
-        return true;
-    return false;
+    return _channels.find(channel) != _channels.end();
 }
