@@ -45,7 +45,7 @@ class Client
         const std::set<Channel *> &getChannels() const;
 
         //Setters
-        void setFd(int socket);
+        void setSocket(int socket);
         void setNickname(const std::string &nickname);
         void setUsername(const std::string &username);
         void setRealname(const std::string &realname);
@@ -58,12 +58,14 @@ class Client
         //Buffer
         void appendBuffer(const std::string &data);
         void clearBuffer();
+        bool hasCommandBuffer() const;
+        std::string getCommandFromBuffer();
 
         // Channels
         void addChannel(Channel *channel);
         void removeChannel(Channel *channel);
         bool isInChannel(Channel *channel) const;
-
+        void disconnect();
 };
 
 #endif
