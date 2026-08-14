@@ -161,3 +161,14 @@ bool Client::isInChannel(Channel *channel) const
 {
     return _channels.find(channel) != _channels.end();
 }
+
+void Client::disconnect()
+{
+    while (!_channels.empty())
+    {
+        Channel *channel;
+
+        channel = *_channels.begin();
+        removeChannel(channel);
+    }
+}

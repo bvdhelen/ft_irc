@@ -65,7 +65,7 @@ class Client
         void addChannel(Channel *channel);
         void removeChannel(Channel *channel);
         bool isInChannel(Channel *channel) const;
-
+        void disconnect();
 };
 
 #endif
