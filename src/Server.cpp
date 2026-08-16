@@ -181,8 +181,7 @@ void Server::disconnectClient(size_t& pollIndex)
 {
 	int clientfd = _pollfds[pollIndex].fd;
 	Client* client = getClientBySocket(clientfd);
-	(void)client;
-	//client.disconect();
+	client->disconnect();
 	close(clientfd);
 	std::cout << "A client disconected." << std::endl;
 	//Erase from Server data structures.
@@ -219,7 +218,6 @@ Client *Server::getClientByNick(const std::string &nickToSearch)
 
     for (; it != end; ++it)
     {
-		(void) nickToSearch;
         if (it->second.getNickname().compare(nickToSearch) == 0)
     		return &(it->second);
     }
