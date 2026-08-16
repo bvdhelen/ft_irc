@@ -27,6 +27,7 @@ class Channel
 		void addClient(Client *client);
 		void removeClient(Client *client); //que no quede nadie dentro
 		bool hasClient(Client *client) const;
+		bool isEmpty() const;
 
 		// operators
 		void addOperator(Client *client);
@@ -38,21 +39,32 @@ class Channel
 		const std::string &getTopic() const;
 
 		// modes
+		// mode - invite only
 		void setInviteOnly(bool value);
 		bool isInviteOnly() const;
 
-		void setTopicOperatorOnly(bool value);
-		bool isTopicOperatorOnly() const;
+		// mode - protected topic
+		void setProtectedTopic(bool value);
+		bool isProtectedTopic() const;
 
+		// mode - password
 		void setPassword(const std::string &password);
 		void removePassword();
 		bool hasPassword() const;
 		bool checkPassword(const std::string &password) const;
 
+		// mode - user limit
 		void setUserLimit(size_t limit);
 		void removeUserLimit(); //remove es set a 0
 		bool hasUserLimit() const;
 		bool isFull() const;
+
+        // exception
+		class NameTooLongException : public std::exception
+		{
+			public:
+				virtual const char *what() const throw();
+		};
 };
 
 #endif
