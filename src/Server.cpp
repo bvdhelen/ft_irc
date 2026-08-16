@@ -44,6 +44,10 @@ void Server::initSockets()
 	if (_socket < 0)
 		throw Server::SocketFileDescriptorException();
 
+	int valueToSet = 1;
+	//Setsockopt is to be able to reuse a port.
+	setsockopt(_socket, SOL_SOCKET, SO_REUSEADDR, &valueToSet, sizeof(valueToSet));
+
 	if (fcntl(_socket, F_SETFL, O_NONBLOCK) < 0)
 	{
 		close(_socket);
