@@ -39,7 +39,7 @@ class Channel
 		const std::string &getTopic() const;
 
 		// modes
-                // mode - invite only
+		// mode - invite only
 		void setInviteOnly(bool value);
 		bool isInviteOnly() const;
 
@@ -59,7 +59,7 @@ class Channel
 		bool hasUserLimit() const;
 		bool isFull() const;
 
-                // exception
+        // exception
 		class InvalidNameException : public std::exception
 		{
 			public:
