@@ -1,0 +1,272 @@
+#include "../include/Server.hpp"
+#include "Server.hpp"
+
+volatile sig_atomic_t Server::_isRunning = false;
+
+//Lo siento Izhan, los signal handlers van siempre arriba.
+void Server::termination_handler(const int signal)
+{
+	Server::_isRunning = false;
+	(void)signal;
+}
+
+Server::Server(int port, const std::string &password): _socket(-1), _port(port), _password(password)
+{
+}
+
+Server::~Server()
+{
+}
+
+void Server::initServer()
+{
+	initSignals();
+	initSockets();
+}
+
+//Note: sigaction() can fail, but only when invalid parameters are sent. This is obviously not the case
+//Therefore, no exception exists about signals.
+void Server::initSignals()
+{
+	struct sigaction signal;
+	sigset_t sigset;
+	sigemptyset(&sigset);
+	signal.sa_mask = sigset;
+	signal.sa_flags = 0;
+	signal.sa_handler = Server::termination_handler;
+	sigaction(SIGINT, &signal, NULL);
+	sigaction(SIGTERM, &signal, NULL);
+}
+
+void Server::initSockets()
+{
+	_socket = socket(AF_INET, SOCK_STREAM, 0);
+	if (_socket < 0)
+		throw Server::SocketFileDescriptorException();
+
+	if (fcntl(_socket, F_SETFL, O_NONBLOCK) < 0)
+	{
+		close(_socket);
+		throw Server::BlockingSocketException();
+	}
+
+	struct sockaddr_in sck;
+	sck.sin_family = AF_INET; //IPv4
+	sck.sin_port = htons(_port);
+	sck.sin_addr.s_addr = INADDR_ANY; //Anyone can write to the socket.
+
+	if (bind(_socket,(const struct sockaddr *)&sck, sizeof(sck)) < 0)
+	{
+		close(_socket);
+		throw Server::BindAddressException();
+	}
+
+	if (listen(_socket, SOMAXCONN) < 0) //SOMAXCONN calculates the maximum connections a socket can handle.
+	{
+		close(_socket);
+		throw Server::ListenConnectionsException();
+	}
+
+	struct pollfd server_pfd;
+	server_pfd.fd = _socket;
+	server_pfd.events = POLLIN;
+	server_pfd.revents = 0;
+	_pollfds.push_back(server_pfd);
+}
+
+//The printed message it's usefull to know when the server is ready. But it not mandatory.
+void Server::run()
+{
+	Server::_isRunning = true;
+	std::cout << "IRC Server is now working!" << std::endl;
+	while(Server::_isRunning)
+	{
+		int activity = poll(_pollfds.data(), _pollfds.size(), -1);
+
+		if (activity < 0)
+		{
+			//Poll can be interrupted by signals, in which case sets errno to EINTR.
+			if (errno == EINTR)
+				continue;
+			throw Server::PollingFailedException();
+		}
+
+		for (size_t i = 0; i < _pollfds.size(); i++)
+		{
+			//POLLERR, POLLHUP, POLLNVAL indicate that a socket has an error or disconnected.
+			if (_pollfds[i].revents & (POLLERR | POLLHUP | POLLNVAL))
+			{
+				if (_pollfds[i].fd == _socket)
+					throw Server::PollingFailedException();
+				disconnectClient(i);
+			}
+			else if (_pollfds[i].revents & POLLIN)
+			{
+				if (_pollfds[i].fd == _socket)
+					acceptClient(_pollfds[i].fd);
+				else
+					receiveFromClient(i);
+			}
+		}
+	}
+	std::cout << "Shutting down cleanly..." << std::endl;
+	closeServer();
+}
+void Server::acceptClient(int serverfd)
+{
+	struct sockaddr_in clientSck;
+	clientSck.sin_family = AF_INET;
+	clientSck.sin_addr.s_addr = INADDR_ANY;
+	socklen_t socketLength = sizeof(clientSck);
+	int clientSocket = accept(serverfd, (struct sockaddr *)&clientSck, &socketLength);
+	if (clientSocket < 0)
+	{
+		std::cout << "A client has been rejected." << std::endl;
+		return;
+	}
+
+	if (fcntl(clientSocket, F_SETFL, O_NONBLOCK) < 0)
+	{
+		close(clientSocket);
+		return;
+	}
+
+	struct pollfd server_pfd;
+	server_pfd.fd = clientSocket;
+	server_pfd.events = POLLIN;
+	server_pfd.revents = 0;
+	_pollfds.push_back(server_pfd);
+
+	_clients.insert(std::pair<int, Client>(clientSocket, Client(clientSocket)));
+	std::cout << "A client has been accepted." << std::endl;
+}
+
+/**
+ * Uses recv to receive the message from the client, bytesRead tells the number of bytes.
+ * If bytesRead is more than 0, a message has been received and should be processed.
+ * If its exactly 0 bytes, it means the client has disconnected.
+ * If its -1, an error has ocurred.
+ */
+void Server::receiveFromClient(size_t& pollIndex)
+{
+	char buffer[512];
+	ssize_t bytesRead;
+
+	bytesRead = recv(_pollfds[pollIndex].fd, buffer, sizeof(buffer) - 1, 0);
+	if (bytesRead == -1)
+	{
+		//recv can fail because there was just no message to read.
+		if (errno == EAGAIN || errno == EWOULDBLOCK)
+			return;
+		//if its other error, then its serious
+		disconnectClient(pollIndex);
+	}
+	else if (bytesRead == 0)
+		disconnectClient(pollIndex);
+	else
+	{
+		buffer[bytesRead] = '\0';
+		processData(buffer, pollIndex);
+	}
+}
+
+//Esta función desconecta a clientes...
+//¿Debe encargarse de desconectarlos de todos los canales primero.
+//¿Deberia la clase client tener una función disconnect?
+void Server::disconnectClient(size_t& pollIndex)
+{
+	int clientfd = _pollfds[pollIndex].fd;
+	Client* client = getClientBySocket(clientfd);
+	(void)client;
+	//client.disconect();
+	close(clientfd);
+	std::cout << "A client disconected." << std::endl;
+	//Erase from Server data structures.
+	_clients.erase(clientfd);
+	_pollfds.erase(_pollfds.begin() + pollIndex);
+	pollIndex--;
+}
+
+void Server::processData(std::string data, size_t pollIndex)
+{
+    Client * client = getClientBySocket(_pollfds[pollIndex].fd);
+	client->appendBuffer(data);
+	while (client->hasCommandBuffer())
+	{
+		std::string command = client->getCommandFromBuffer();
+		//This line its only for debbuging purposes.
+		std::cout << "Command received: |" << command << "|" << std::endl;
+		//Call the parser here!
+	}	
+}
+
+Client *Server::getClientBySocket(int socket)
+{
+    std::map<int, Client>::iterator it = _clients.find(socket);
+    if (it != _clients.end())
+        return &(it->second);
+    return NULL;
+}
+
+Client *Server::getClientByNick(const std::string &nickToSearch)
+{
+    std::map<int, Client>::iterator it = _clients.begin();
+    std::map<int, Client>::iterator end = _clients.end();
+
+    for (; it != end; ++it)
+    {
+		(void) nickToSearch;
+        if (it->second.getNickname().compare(nickToSearch) == 0)
+    		return &(it->second);
+    }
+    return NULL;
+}
+
+Channel *Server::getChannelByName(const std::string &name)
+{
+    std::map<std::string, Channel>::iterator it = _channels.find(name);
+    if (it != _channels.end())
+        return &(it->second);
+    return NULL;
+}
+
+//Por el momento esta función solo cierra todos los sockets abiertos.
+//Quizá queda bonito que se envie un ultimo mensaje del tipo "Connection closed by server".
+void Server::closeServer()
+{
+	for(size_t i = 0; i < _pollfds.size(); i++)
+	{
+		Client *client = getClientBySocket(_pollfds[i].fd);
+		if (client == NULL)
+			continue;
+		client->disconnect();
+		close(client->getSocket());
+	}
+	close(_socket);
+}
+
+//Exceptions:
+const char* Server::SocketFileDescriptorException::what() const throw()
+{
+	return "Couldn't create a file descriptor for the socket. (socket() failed)";
+}
+
+const char* Server::BlockingSocketException::what() const throw()
+{
+	return "Couldn't mark the socket as non-blocking. (fctnl() failed)";
+}
+
+const char* Server::BindAddressException::what() const throw()
+{
+	return "Couldn't assign address (port) for file descriptor of the socket. (bind() failed)";
+}
+
+const char* Server::ListenConnectionsException::what() const throw()
+{
+	return "Socket couldn't be used to listen incoming connections. (listen() failed)";
+}
+
+const char* Server::PollingFailedException::what() const throw()
+{
+	return "Polling of sockets failed. (poll() failed)";
+}
