@@ -2,9 +2,8 @@
 #define SERVER_HPP
 
 #include "ft_irc.hpp"
-
-class Client;
-class Channel;
+#include "Client.hpp"
+#include "Channel.hpp"
 
 class Server
 {
@@ -13,7 +12,7 @@ class Server
 		int _socket;
 		int _port;
 		std::string _password;
-		bool _isRunning;
+		static volatile sig_atomic_t _isRunning;
 
 		//Conocer los clientes
 		std::map<int, Client> _clients;
@@ -24,24 +23,54 @@ class Server
 		//Vector de pollfds
 		std::vector<struct pollfd> _pollfds;
 
-		
+		static void termination_handler(const int signal);
+		void initSignals();
+		void initSockets();
+
+		void acceptClient(int serverfd);
+		void disconnectClient(size_t& pollIndex);
+		void receiveFromClient(size_t& pollIndex);
+		void processData(std::string data, size_t pollIndex);
 	public:
+
 		Server(int port, const std::string &password);
 		~Server();
 
-		//Inicializar [socket(), bind(), listen()]
 		void initServer();
-
-		//Bucle principal
 		void run();
+		void closeServer();
 
+		//Getters (more can be done)
 		Client *getClientBySocket(int socket);
 		Client *getClientByNick(const std::string &nickToSearch);
 		Channel *getChannelByName(const std::string &name);
 
-		// void acceptClient(); //nuevo cliente
-		// void disconnectClient(int fd); //desconectar cliente
-		// void executeCommand(Client &, Command &); //ejecutar comandos
+		//Exceptions:
+		class SocketFileDescriptorException : public std::exception
+		{
+			const char* what() const throw();
+		};
+
+		class BlockingSocketException : public std::exception
+		{
+			const char* what() const throw();
+		};
+
+		class BindAddressException : public std::exception
+		{
+			const char* what() const throw();
+		};
+
+		class ListenConnectionsException : public std::exception
+		{
+			const char* what() const throw();
+		};
+
+		class PollingFailedException : public std::exception
+		{
+			const char* what() const throw();
+		};
+
 };
 
 #endif

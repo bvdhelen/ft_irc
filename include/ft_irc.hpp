@@ -34,5 +34,6 @@
 #include <map>
 #include <cstdlib>
 #include <exception>
+#include <cerrno>
 
 #endif
