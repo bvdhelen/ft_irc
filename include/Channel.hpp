@@ -60,7 +60,7 @@ class Channel
 		bool isFull() const;
 
         // exception
-		class InvalidNameException : public std::exception
+		class NameTooLongException : public std::exception
 		{
 			public:
 				virtual const char *what() const throw();

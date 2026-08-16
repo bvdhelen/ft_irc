@@ -10,8 +10,8 @@ Channel::Channel(const std::string &name, const std::string &password)
 					_inviteOnly(false),
 					_protectedTopic(false)
 {
-	if (_name.size() > 200)
-		throw InvalidNameException();
+	if (_name.size() > 50)
+		throw NameTooLongException();
 }
 
 // Destructor
@@ -138,7 +138,7 @@ bool Channel::isFull() const
 }
 
 // exception
-const char *Channel::InvalidNameException::what() const throw()
+const char *Channel::NameTooLongException::what() const throw()
 {
-	return "Channel name cannot exceed 200 characters";
+	return "Channel name cannot exceed 50 characters";
 }
