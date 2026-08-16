@@ -25,7 +25,7 @@ int main(int argc, char **argv)
         std::cerr << "Error: password cannot be empty."<< std::endl;
         return 1;
     }
-/*
+
     try
     {
         Server server(port, password);
@@ -38,7 +38,6 @@ int main(int argc, char **argv)
         std::cerr << "Error: " << e.what() << std::endl;
         return 1;
     }
-    */
-    
+
     return 0;
 }

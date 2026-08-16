@@ -10,6 +10,8 @@ Channel::Channel(const std::string &name, const std::string &password)
           _inviteOnly(false),
           _protectedTopic(false)
 {
+  if (_name.size() > 200)
+    throw InvalidNameException();
 }
 
 // Destructor
@@ -20,17 +22,13 @@ Channel::~Channel()
 // Clients
 void Channel::addClient(Client *client)
 {
-  // TODO ¿hacemos algo si viene a null o el cliente ya está en el canal?
   _clients.insert(client);
 }
 
 void Channel::removeClient(Client *client)
 {
-  // TODO ¿hacemos algo si viene a null o el cliente NO está en el canal?
   _clients.erase(client);
   _operators.erase(client);
-
-  // TODO ¿como gestionamos el borrar el canal cuando se queda vacio?
 }
 
 bool Channel::hasClient(Client *client) const
@@ -38,25 +36,21 @@ bool Channel::hasClient(Client *client) const
   return _clients.find(client) != _clients.end();
 }
 
-// TODO para que el server se pueda enterar de que tiene que borrar el canal (cuando se va el ultimo cliente)
-// bool Channel::isEmpty() const
-// {
-//   return _clients.empty();
-// }
+// para que el server se pueda enterar de que tiene que borrar el canal (cuando se va el ultimo cliente)
+bool Channel::isEmpty() const
+{
+  return _clients.empty();
+}
 
 // Operators
+// el comando tiene que comprobar que el cliente este en el canal
 void Channel::addOperator(Client *client)
 {
-  // TODO: decide what to do if client is NULL or not in the channel
-  if (!hasClient(client))
-    return;
-
   _operators.insert(client);
 }
 
 void Channel::removeOperator(Client *client)
 {
-  // TODO: decide what to do if client is NULL or not an operator
   _operators.erase(client);
 }
 
@@ -68,7 +62,6 @@ bool Channel::isOperator(Client *client) const
 // Topic
 void Channel::setTopic(const std::string &topic)
 {
-  // TODO tenia max de chars?
   _topic = topic;
 }
 
@@ -115,16 +108,16 @@ bool Channel::hasPassword() const
   return !_password.empty();
 }
 
+// el comando se encarga de comprobar si el canal tiene o no contraseña
 bool Channel::checkPassword(const std::string &password) const
 {
-  // TODO que hacemos cuando no hay contraseña?
   return _password == password;
 }
 
 // mode - user limit
+// si un canal no tenia limite y le ponen un limite menor al numero de clientes que tiene conserva a los clientes
 void Channel::setUserLimit(size_t limit)
 {
-  // TODO que pasa si un canal no tenia limite y le ponen un limite menor al numero de clientes que tiene?
   _userLimit = limit;
 }
 
@@ -138,8 +131,14 @@ bool Channel::hasUserLimit() const
   return _userLimit != 0;
 }
 
+// el canal puede tener más clientes del limite si ya estaban ahi antes de ponerlo
 bool Channel::isFull() const
 {
-  // TODO el >= depende del TODO de setUserLimit
   return hasUserLimit() && _clients.size() >= _userLimit;
+}
+
+// exception
+const char *Channel::InvalidNameException::what() const throw()
+{
+  return "Channel name cannot exceed 200 characters";
 }

@@ -27,7 +27,7 @@ class Channel
 		void addClient(Client *client);
 		void removeClient(Client *client); //que no quede nadie dentro
 		bool hasClient(Client *client) const;
-		// TODO bool isEmpty() const;
+		bool isEmpty() const;
 
 		// operators
 		void addOperator(Client *client);
@@ -58,6 +58,13 @@ class Channel
 		void removeUserLimit(); //remove es set a 0
 		bool hasUserLimit() const;
 		bool isFull() const;
+
+                // exception
+		class InvalidNameException : public std::exception
+		{
+			public:
+				virtual const char *what() const throw();
+		};
 };
 
 #endif
