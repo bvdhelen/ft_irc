@@ -9,9 +9,6 @@
 # define RPL_CREATED        "003" // Fecha de creación del servidor
 # define RPL_MYINFO         "004" // Información sobre el servidor y modos
 
-// User MODE
-# define RPL_UMODEIS        "221" // Muestra los modos actuales del usuario
-
 // Channel MODE
 # define RPL_CHANNELMODEIS  "324" // Muestra los modos actuales del canal
 
@@ -25,10 +22,6 @@
 // NAMES / JOIN
 # define RPL_NAMREPLY       "353" // Lista de usuarios del canal
 # define RPL_ENDOFNAMES     "366" // Fin de la lista de usuarios
-
-// OPER
-# define RPL_YOUREOPER      "381" // El cliente se ha convertido en operador
-
 
 // ====================== ERRORS ======================
 
@@ -55,10 +48,6 @@
 # define ERR_USERONCHANNEL      "443" // El usuario ya está en el canal
 # define ERR_NOTREGISTERED      "451" // El cliente todavía no está registrado
 # define ERR_ALREADYREGISTERED  "462" // El cliente ya está registrado
-
-// USER MODE
-# define ERR_USERSDONTMATCH     "502" // El usuario indicado no coincide con el cliente
-# define ERR_UMODEUNKNOWNFLAG   "501" // Modo de usuario desconocido
 
 // PASS / OPER
 # define ERR_PASSWDMISMATCH     "464" // La contraseña no coincide
