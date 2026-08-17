@@ -208,6 +208,32 @@ const std::string &Server::getPassword()
 	return _password;
 }
 
+const std::list<Client *> Server::getAllClients()
+{
+	std::list<Client*> clients;
+
+	std::map<int, Client>::iterator it = _clients.begin();
+
+	for(; it != _clients.end(); it++)
+	{
+		clients.push_back(&(it->second));
+	}
+	return clients;
+}
+
+const std::list<Channel*> Server::getAllChannels()
+{
+	std::list<Channel*> channels;
+
+	std::map<std::string, Channel>::iterator it = _channels.begin();
+
+	for (; it != _channels.end(); it++)
+	{
+		channels.push_back(&(it->second));
+	}
+	return channels;
+}
+
 Client *Server::getClientBySocket(int socket)
 {
     std::map<int, Client>::iterator it = _clients.find(socket);

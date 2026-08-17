@@ -42,6 +42,8 @@ class Server
 
 		//Getters (more can be done)
 		const std::string& getPassword();
+		const std::list<Client*> getAllClients();
+		const std::list<Channel*> getAllChannels();
 		Client *getClientBySocket(int socket);
 		Client *getClientByNick(const std::string &nickToSearch);
 		Channel *getChannelByName(const std::string &name);
