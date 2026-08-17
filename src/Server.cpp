@@ -203,6 +203,11 @@ void Server::processData(std::string data, size_t pollIndex)
 	}	
 }
 
+const std::string &Server::getPassword()
+{
+	return _password;
+}
+
 Client *Server::getClientBySocket(int socket)
 {
     std::map<int, Client>::iterator it = _clients.find(socket);
