@@ -41,6 +41,7 @@ class Server
 		void closeServer();
 
 		//Getters (more can be done)
+		const std::string& getPassword();
 		Client *getClientBySocket(int socket);
 		Client *getClientByNick(const std::string &nickToSearch);
 		Channel *getChannelByName(const std::string &name);
