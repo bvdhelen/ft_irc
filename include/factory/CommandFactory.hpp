@@ -1,7 +1,7 @@
 #ifndef COMMANDFACTORY_HPP
 #define COMMANDFACTORY_HPP
 
-#include "../ft_irc.hpp"
+#include "ft_irc.hpp"
 
 class Command;
 
