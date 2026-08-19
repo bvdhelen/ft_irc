@@ -13,7 +13,7 @@ class Server
 		int _port;
 		std::string _password;
 		static volatile sig_atomic_t _isRunning;
-
+	
 		//Conocer los clientes
 		std::map<int, Client> _clients;
 
@@ -40,7 +40,7 @@ class Server
 		void run();
 		void closeServer();
 
-		void sendReplyToClient(int clientfd, int reply_number, std::string message);
+		void sendReplyToClient(int clientfd, int reply_number, const std::string& message);
 	
 		//Getters (more can be done)
 		const std::string& getPassword();
