@@ -1,4 +1,4 @@
-#include "../include/Server.hpp"
+#include "Server.hpp"
 
 
 volatile sig_atomic_t Server::_isRunning = false;
