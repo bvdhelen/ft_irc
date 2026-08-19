@@ -32,7 +32,9 @@
 #include <set>
 #include <vector>
 #include <map>
+#include <list>
 #include <cstdlib>
 #include <exception>
+#include <cerrno>
 
 #endif
