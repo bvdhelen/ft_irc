@@ -3,7 +3,7 @@
 
 #include "ft_irc.hpp"
 
-class Channel;
+#include "Channel.hpp"
 
 class Client
 {
