@@ -1,5 +1,5 @@
-#ifndef PARTCOMMAND_HPP
-# define PARTCOMMAND_HPP
+#ifndef JOINCOMMAND_HPP
+# define JOINCOMMAND_HPP
 
 #include "Replies.hpp"
 #include "Command.hpp"
@@ -7,11 +7,11 @@
 #include "Client.hpp"
 #include "Channel.hpp"
 
-class PartCommand : public Command
+class JoinCommand : public Command
 {
     public:
-        PartCommand(const std::vector<std::string> &params);
-        ~PartCommand();
+        JoinCommand(const std::vector<std::string> &params);
+        ~JoinCommand();
 
         void execute(Server &server, Client &client);
 };

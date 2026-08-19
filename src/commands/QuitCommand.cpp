@@ -9,6 +9,7 @@ QuitCommand::~QuitCommand()
 {
 }
 
+//TODO
 void QuitCommand::execute(Server &server, Client &client)
 {
     (void)server;

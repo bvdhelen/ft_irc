@@ -154,7 +154,6 @@ void Client::removeChannel(Channel *channel)
 {
     _channels.erase(channel);
     channel->removeClient(this);
-    //REDUNDANTE?? channel->removeOperator(this);
 }
 
 bool Client::isInChannel(Channel *channel) const
