@@ -1,5 +1,5 @@
 #include "../include/Server.hpp"
-#include "Server.hpp"
+
 
 volatile sig_atomic_t Server::_isRunning = false;
 
@@ -201,6 +201,14 @@ void Server::processData(std::string data, size_t pollIndex)
 		std::cout << "Command received: |" << command << "|" << std::endl;
 		//Call the parser here!
 	}	
+}
+
+//
+void Server::sendReplyToClient(int clientfd, int reply_number, std::string message)
+{
+	(void)clientfd;
+	(void)reply_number;
+	(void)message;
 }
 
 const std::string &Server::getPassword()

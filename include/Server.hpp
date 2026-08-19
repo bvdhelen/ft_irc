@@ -40,6 +40,8 @@ class Server
 		void run();
 		void closeServer();
 
+		void sendReplyToClient(int clientfd, int reply_number, std::string message);
+	
 		//Getters (more can be done)
 		const std::string& getPassword();
 		const std::list<Client*> getAllClients();
