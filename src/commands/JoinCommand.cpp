@@ -16,7 +16,10 @@ void JoinCommand::execute(Server &server, Client &client)
 
     if (_params.empty())
     {
-        // ERR_NEEDMOREPARAMS
+        server.sendReplyToClient(
+            client.getSocket(),
+            ERR_NEEDMOREPARAMS,
+            "Not enough parameters");
         return ;
     }
     channelName = _params[0];
