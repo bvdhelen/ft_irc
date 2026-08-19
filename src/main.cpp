@@ -26,16 +26,16 @@ int main(int argc, char **argv)
         return 1;
     }
 
+	Server server(port, password);
     try
     {
-        Server server(port, password);
-    
         server.initServer();
         server.run();
     }
     catch(const std::exception &e)
     {
-        std::cerr << "Error: " << e.what() << std::endl;
+		server.closeServer();
+		std::cerr << "Error: " << e.what() << std::endl;
         return 1;
     }
     
