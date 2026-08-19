@@ -1,5 +1,5 @@
-#include "../include/Channel.hpp"
-#include "../include/Client.hpp"
+#include "Channel.hpp"
+#include "Client.hpp"
 
 // Constructor
 Channel::Channel(const std::string &name, const std::string &password)
