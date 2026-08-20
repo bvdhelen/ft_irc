@@ -1,5 +1,5 @@
-#include "../include/Server.hpp"
 #include "Server.hpp"
+
 
 volatile sig_atomic_t Server::_isRunning = false;
 
@@ -199,8 +199,16 @@ void Server::processData(std::string data, size_t pollIndex)
 		std::string command = client->getCommandFromBuffer();
 		//This line its only for debbuging purposes.
 		std::cout << "Command received: |" << command << "|" << std::endl;
-		//Call the parser here!
+		//TODO: Parser here!
 	}	
+}
+
+//
+void Server::sendReplyToClient(int clientfd, int reply_number, const std::string& message)
+{
+	(void)clientfd;
+	(void)reply_number;
+	(void)message;
 }
 
 const std::string &Server::getPassword()
@@ -263,8 +271,7 @@ Channel *Server::getChannelByName(const std::string &name)
     return NULL;
 }
 
-//Por el momento esta función solo cierra todos los sockets abiertos.
-//Quizá queda bonito que se envie un ultimo mensaje del tipo "Connection closed by server".
+//TODO: Envíar mensaje a cliente con algo parecido a "Connection closed by server"
 void Server::closeServer()
 {
 	for(size_t i = 0; i < _pollfds.size(); i++)
