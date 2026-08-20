@@ -47,7 +47,8 @@ void PartCommand::partChannel(Server &server, Client &client, const std::string 
     {
         server.sendReplyToClient(
             client.getSocket(),
-            ERR_NOSUCHCHANNEL,                "No such channel");
+            ERR_NOSUCHCHANNEL,
+            "No such channel");
     }
     else if (!client.isInChannel(channel))
     {

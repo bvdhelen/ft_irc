@@ -16,6 +16,9 @@ void QuitCommand::execute(Server &server, Client &client)
 
     message = ":" + client.getNickname() + "!"
         + client.getUsername() + " QUIT\r\n";
+    if (!_params.empty())
+        message += " " + _params[0];
+    message += "\r\n";
     it = client.getChannels().begin();
     while (it != client.getChannels().end())
     {
@@ -24,7 +27,5 @@ void QuitCommand::execute(Server &server, Client &client)
     }
     client.disconnect();
     server.removeEmptyChannels();
-    //TODO: gestionar la desconexion
-    //los canales que se han quedado vacios siguen estando en Server::_channels
-    //TENEMOS QUE DECIDIR DONDE ELIMINAR LOS CANALES VACIOS
+    client.setRequestedDisconnection(true);
 }
