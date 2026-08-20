@@ -306,6 +306,20 @@ void Server::removeChannel(const std::string &name)
     _channels.erase(name);
 }
 
+void Server::removeEmptyChannels()
+{
+    std::map<std::string, Channel>::iterator it;
+
+    it = _channels.begin();
+    while (it != _channels.end())
+    {
+        if (it->second.isEmpty())
+            _channels.erase(it++);
+        else
+            ++it;
+    }
+}
+
 //TODO: Envíar mensaje a cliente con algo parecido a "Connection closed by server"
 void Server::closeServer()
 {
