@@ -223,7 +223,7 @@ void Server::sendToChannel(Channel *channel, const std::string &message)
 	it = channel->getClients().begin();
 	while (it != channel->getClients().end())
 	{
-		send((*it)->getSocket(), message.c_str(), message.size(), 0);
+		sendToClient(*it, message);
 		++it;
 	}
 }
@@ -236,7 +236,7 @@ void Server::sendToChannelExcept(Channel *channel, Client *excluded, const std::
     while (it != channel->getClients().end())
     {
         if (*it != excluded)
-            send((*it)->getSocket(), message.c_str(), message.size(), 0);
+			sendToClient(*it, message);
         ++it;
     }
 }
