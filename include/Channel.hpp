@@ -28,11 +28,13 @@ class Channel
 		void removeClient(Client *client); //que no quede nadie dentro
 		bool hasClient(Client *client) const;
 		bool isEmpty() const;
+		const std::set<Client *> &getClients() const;
 
 		// operators
 		void addOperator(Client *client);
 		void removeOperator(Client *client);
 		bool isOperator(Client *client) const;
+		const std::set<Client *> &getOperators() const;
 
 		// topic
 		void setTopic(const std::string &topic);
