@@ -203,12 +203,42 @@ void Server::processData(std::string data, size_t pollIndex)
 	}	
 }
 
-//
-void Server::sendReplyToClient(int clientfd, int reply_number, const std::string& message)
+//TODO: ¿cambiar nombre a sendReplyError?
+void Server::sendReplyToClient(int clientfd, int reply_number, const std::string &message)
 {
 	(void)clientfd;
 	(void)reply_number;
 	(void)message;
+}
+
+void Server::sendToClient(Client *client, const std::string &message)
+{
+    send(client->getSocket(), message.c_str(), message.size(), 0);
+}
+
+void Server::sendToChannel(Channel *channel, const std::string &message)
+{
+    std::set<Client *>::const_iterator it;
+
+	it = channel->getClients().begin();
+	while (it != channel->getClients().end())
+	{
+		send((*it)->getSocket(), message.c_str(), message.size(), 0);
+		++it;
+	}
+}
+
+void Server::sendToChannelExcept(Channel *channel, Client *excluded, const std::string &message)
+{
+    std::set<Client *>::const_iterator it;
+
+    it = channel->getClients().begin();
+    while (it != channel->getClients().end())
+    {
+        if (*it != excluded)
+            send((*it)->getSocket(), message.c_str(), message.size(), 0);
+        ++it;
+    }
 }
 
 const std::string &Server::getPassword()
@@ -269,6 +299,11 @@ Channel *Server::getChannelByName(const std::string &name)
     if (it != _channels.end())
         return &(it->second);
     return NULL;
+}
+
+void Server::removeChannel(const std::string &name)
+{
+    _channels.erase(name);
 }
 
 //TODO: Envíar mensaje a cliente con algo parecido a "Connection closed by server"
