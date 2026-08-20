@@ -23,6 +23,7 @@ void QuitCommand::execute(Server &server, Client &client)
         ++it;
     }
     client.disconnect();
+    server.removeEmptyChannels();
     //TODO: gestionar la desconexion
     //los canales que se han quedado vacios siguen estando en Server::_channels
     //TENEMOS QUE DECIDIR DONDE ELIMINAR LOS CANALES VACIOS
