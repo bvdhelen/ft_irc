@@ -191,7 +191,7 @@ void Server::disconnectClient(size_t& pollIndex)
 	pollIndex--;
 }
 
-void Server::processData(std::string data, size_t pollIndex)
+void Server::processData(std::string data, size_t& pollIndex)
 {
     Client * client = getClientBySocket(_pollfds[pollIndex].fd);
 	client->appendBuffer(data);
@@ -201,6 +201,13 @@ void Server::processData(std::string data, size_t pollIndex)
 		
 		// TODO: try-catch para excepciones de comandos
 		CommandParser::parseAndExecute(rawLine, *this, *client);
+
+		//Después de ejecutar cada comando, revisar si el cliente debe desconectarse.
+		if (client->hasRequestedDisconnection())
+		{
+			disconnectClient(pollIndex);
+			return;
+		}
 	}	
 }
 
