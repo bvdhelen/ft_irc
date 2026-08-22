@@ -1,4 +1,5 @@
 #include "Server.hpp"
+#include "CommandParser.hpp"
 
 
 volatile sig_atomic_t Server::_isRunning = false;
@@ -196,10 +197,10 @@ void Server::processData(std::string data, size_t pollIndex)
 	client->appendBuffer(data);
 	while (client->hasCommandBuffer())
 	{
-		std::string command = client->getCommandFromBuffer();
-		//This line its only for debbuging purposes.
-		std::cout << "Command received: |" << command << "|" << std::endl;
-		//TODO: Parser here!
+		std::string rawLine = client->getCommandFromBuffer();
+		
+		// TODO: try-catch para excepciones de comandos
+		CommandParser::parseAndExecute(rawLine, *this, *client);
 	}	
 }
 
