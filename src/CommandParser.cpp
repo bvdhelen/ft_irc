@@ -1,6 +1,6 @@
 #include "CommandParser.hpp"
-#include "Command.hpp"
-#include "CommandFactory.hpp"
+#include "commands/Command.hpp"
+#include "factory/CommandFactory.hpp"
 
 void CommandParser::parseAndExecute(std::string line, Server &server, Client &client)
 {
