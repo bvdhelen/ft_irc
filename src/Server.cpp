@@ -190,7 +190,7 @@ void Server::disconnectClient(size_t& pollIndex)
 	pollIndex--;
 }
 
-void Server::processData(std::string data, size_t pollIndex)
+void Server::processData(std::string data, size_t& pollIndex)
 {
     Client * client = getClientBySocket(_pollfds[pollIndex].fd);
 	client->appendBuffer(data);
@@ -200,6 +200,13 @@ void Server::processData(std::string data, size_t pollIndex)
 		//This line its only for debbuging purposes.
 		std::cout << "Command received: |" << command << "|" << std::endl;
 		//TODO: Parser here!
+
+		//Después de ejecutar cada comando, revisar si el cliente debe desconectarse.
+		if (client->hasRequestedDisconnection())
+		{
+			disconnectClient(pollIndex);
+			return;
+		}
 	}	
 }
 

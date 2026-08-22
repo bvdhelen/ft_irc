@@ -30,7 +30,7 @@ class Server
 		void acceptClient(int serverfd);
 		void disconnectClient(size_t& pollIndex);
 		void receiveFromClient(size_t& pollIndex);
-		void processData(std::string data, size_t pollIndex);
+		void processData(std::string data, size_t& pollIndex);
 	public:
 
 		Server(int port, const std::string &password);
