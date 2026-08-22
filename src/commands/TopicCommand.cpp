@@ -49,7 +49,15 @@ void TopicCommand::execute(Server &server, Client &client)
 {
 	Channel *channel;
 
-	if (_params.empty() || _params.size() > 2)
+	if (_params.empty())
+	{
+		server.sendReplyToClient(
+			client.getSocket(),
+			ERR_NEEDMOREPARAMS,
+			"Not enough parameters");
+		return ;
+	}
+	if (_params.size() > 2)
 	{
 		server.sendReplyToClient(
 			client.getSocket(),

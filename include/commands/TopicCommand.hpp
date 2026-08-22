@@ -3,8 +3,6 @@
 
 # include "Replies.hpp"
 # include "Command.hpp"
-# include "Server.hpp"
-# include "Client.hpp"
 # include "Channel.hpp"
 
 /**
