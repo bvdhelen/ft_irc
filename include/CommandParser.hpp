@@ -11,7 +11,7 @@ class CommandParser
 		static void parseAndExecute(std::string line, Server &server, Client &client);
 	private:
 		static std::string parseCommand(std::string &line);
-		static void parseParams(std::string line, std::vector<std::string> &params);
+		static void parseParams(std::string &line, std::vector<std::string> &params);
 };
 
 #endif

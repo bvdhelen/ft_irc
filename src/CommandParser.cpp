@@ -14,8 +14,6 @@ void CommandParser::parseAndExecute(std::string line, Server &server, Client &cl
 	// TODO: try-catch para excepciones de comandos
 	(void)server;
 	(void)client;
-	(void)command;
-	(void)params;
 }
 
 std::string CommandParser::parseCommand(std::string &line)
@@ -35,7 +33,7 @@ std::string CommandParser::parseCommand(std::string &line)
 	return command;
 }
 
-void CommandParser::parseParams(std::string line, std::vector<std::string> &params)
+void CommandParser::parseParams(std::string &line, std::vector<std::string> &params)
 {
 	while (true)
 	{
