@@ -11,8 +11,8 @@ InviteCommand::~InviteCommand(void)
 
 void InviteCommand::execute(Server &server, Client &client)
 {
-    Channel *channel;
     Client *target;
+    Channel *channel;
     std::string message;
 
     if (_params.size() != 2)
@@ -65,9 +65,15 @@ void InviteCommand::execute(Server &server, Client &client)
             "User is already on channel");
         return ;
     }
+    channel->addInvited(target);
     message = ":" + client.getNickname() + "!"
         + client.getUsername() + " INVITE "
         + target->getNickname() + " "
         + channel->getName() + "\r\n";
     server.sendToClient(target, message);
+    //TODO: falta ver como esta implementado CommandFactory & sendReplyToClient()
+    server.sendReplyToClient(
+		client.getSocket(),
+		RPL_INVITING,
+		"");
 }
