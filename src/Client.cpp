@@ -11,7 +11,8 @@ Client::Client(int socket)
       _passOk(false),
       _hasNick(false),
       _hasUser(false),
-      _authenticated(false)
+      _authenticated(false),
+	  _requestedDisconnect(false)
 {
 }
 
@@ -66,6 +67,11 @@ bool Client::isAuthenticated() const
     return _authenticated;
 }
 
+bool Client::hasRequestedDisconnection() const
+{
+	return _requestedDisconnect;
+}
+
 const std::set<Channel *> &Client::getChannels() const
 {
     return _channels;
@@ -112,6 +118,11 @@ void Client::setAuthenticated(bool value)
     _authenticated = value;
 }
 
+void Client::setRequestedDisconnection(bool value)
+{
+	_requestedDisconnect = value;
+}
+
 // Buffer
 void Client::appendBuffer(const std::string &data)
 {
@@ -154,7 +165,6 @@ void Client::removeChannel(Channel *channel)
 {
     _channels.erase(channel);
     channel->removeClient(this);
-    channel->removeOperator(this);
 }
 
 bool Client::isInChannel(Channel *channel) const

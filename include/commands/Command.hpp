@@ -1,9 +1,9 @@
 #ifndef COMMAND_HPP
-#define COMMAND_HPP
+# define COMMAND_HPP
 
-#include "ft_irc.hpp"
-#include "Server.hpp"
-#include "Client.hpp"
+# include "ft_irc.hpp"
+# include "Server.hpp"
+# include "Client.hpp"
 
 class Command
 {

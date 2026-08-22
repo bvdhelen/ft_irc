@@ -42,6 +42,11 @@ bool Channel::isEmpty() const
 	return _clients.empty();
 }
 
+const std::set<Client *> &Channel::getClients() const
+{
+    return _clients;
+}
+
 // Operators
 // el comando tiene que comprobar que el cliente este en el canal
 void Channel::addOperator(Client *client)
@@ -57,6 +62,11 @@ void Channel::removeOperator(Client *client)
 bool Channel::isOperator(Client *client) const
 {
 	return _operators.find(client) != _operators.end();
+}
+
+const std::set<Client *> &Channel::getOperators() const
+{
+    return _operators;
 }
 
 // Topic
