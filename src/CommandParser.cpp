@@ -10,7 +10,7 @@ void CommandParser::parseAndExecute(std::string line, Server &server, Client &cl
 	parseParams(line, params);
 
 	Command *cmd = CommandFactory::createCommand(commandName, params);
-	if (!cmd) // ? command not found -> error?
+	if (!cmd) // TODO @rub command not found -> send error 421
 		return;
 	
 	cmd->execute(server, client);
