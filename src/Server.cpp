@@ -240,7 +240,8 @@ void Server::sendReplyToClient(Client *client, int reply_number, const std::stri
 
 void Server::sendReplyToClientRaw(Client *client, const std::string& messageRaw)
 {
-	send(client->getSocket(), messageRaw.c_str(), messageRaw.length(), 0);
+	if (send(client->getSocket(), messageRaw.c_str(), messageRaw.length(), 0) < 0)
+		client->setRequestedDisconnection(true);
 }
 
 void Server::sendToChannelRaw(Channel *channel, const std::string &messageRaw)
@@ -253,8 +254,7 @@ void Server::sendToChannelRaw(Channel *channel, const std::string &messageRaw)
 	for(; it != clients.end(); it++)
 	{
 		Client *client = *it;
-    	if (send(client->getSocket(), messageRaw.c_str(), messageRaw.length(), 0) < 0)
-		client->setRequestedDisconnection(true);
+		sendReplyToClientRaw(client, messageRaw);
 	}
 }
 
@@ -270,8 +270,7 @@ void Server::sendToChannelExceptRaw(Channel *channel, Client *clientExcept, cons
 		Client *client = *it;
 		if (client == clientExcept)
 			continue;
-    	if (send(client->getSocket(), messageRaw.c_str(), messageRaw.length(), 0) < 0)
-		client->setRequestedDisconnection(true);
+		sendReplyToClientRaw(client, messageRaw);
 	}
 }
 
