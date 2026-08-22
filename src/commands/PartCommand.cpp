@@ -53,9 +53,9 @@ void PartCommand::partChannel(Server &server, Client &client, const std::string 
     else if (!client.isInChannel(channel))
     {
         server.sendReplyToClient(
-        client.getSocket(),
-        ERR_NOTONCHANNEL,
-        "You're not on that channel");
+            client.getSocket(),
+            ERR_NOTONCHANNEL,
+            "You're not on that channel");
     }
     else
     {
@@ -90,11 +90,11 @@ void PartCommand::execute(Server &server, Client &client)
     {
         //TODO: ¿que mensaje saca el protocolo?
         //ta bien?
-            // server.sendReplyToClient(
-            //     client.getSocket(),
-            //     ERR_BADCHANMASK,
-            //     "Bad channel mask");
-            // return ;
+        server.sendReplyToClient(
+            client.getSocket(),
+            ERR_NOSUCHCHANNEL,
+            "No such channel");
+        return ;
     }
     it = channels.begin();
     while (it != channels.end())
