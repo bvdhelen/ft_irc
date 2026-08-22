@@ -29,6 +29,7 @@ void Channel::removeClient(Client *client)
 {
 	_clients.erase(client);
 	_operators.erase(client);
+	_invited.erase(client);
 }
 
 bool Channel::hasClient(Client *client) const
@@ -67,6 +68,22 @@ bool Channel::isOperator(Client *client) const
 const std::set<Client *> &Channel::getOperators() const
 {
     return _operators;
+}
+
+// Invite
+void Channel::addInvited(Client *client)
+{
+    _invited.insert(client);
+}
+
+void Channel::removeInvited(Client *client)
+{
+    _invited.erase(client);
+}
+
+bool Channel::isInvited(Client *client) const
+{
+    return _invited.find(client) != _invited.end();
 }
 
 // Topic
