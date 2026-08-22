@@ -41,7 +41,7 @@ class Server
 		void closeServer();
 
 		//Send
-		void sendReplyToClient(int clientfd, int reply_number, const std::string &message);
+		void sendReplyToClient(Client *client, int reply_number, const std::string &message);
 		void sendToClient(Client *client, const std::string &message);
 		void sendToChannel(Channel *channel, const std::string &message);
 		void sendToChannelExcept(Channel *channel, Client *excluded, const std::string &message);

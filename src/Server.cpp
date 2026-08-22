@@ -210,17 +210,21 @@ void Server::processData(std::string data, size_t& pollIndex)
 	}	
 }
 
-//TODO: ¿cambiar nombre a sendReplyError?
-void Server::sendReplyToClient(int clientfd, int reply_number, const std::string &message)
-{
-	(void)clientfd;
-	(void)reply_number;
-	(void)message;
-}
-
 void Server::sendToClient(Client *client, const std::string &message)
 {
-    send(client->getSocket(), message.c_str(), message.size(), 0);
+	std::string toSend = message;
+    if (toSend.size() < 2 || toSend.compare(toSend.size() - 2, 2, "\r\n") != 0)
+        toSend += "\r\n";
+    if (send(client->getFd(), toSend.c_str(), toSend.size(), 0) < 0)
+        client->setRequestedDisconnection(true);
+}
+
+void Server::sendReplyToClient(Client *client, int reply_number, const std::string &message)
+{
+	std::string formatted = ":" + _serverName + " " +
+                        std::to_string(reply_number) + " " +
+                        client->getNickname() + " :" + message;
+    sendToClient(client, formatted);
 }
 
 void Server::sendToChannel(Channel *channel, const std::string &message)
