@@ -13,7 +13,6 @@ void CommandParser::parseAndExecute(std::string line, Server &server, Client &cl
 	if (!cmd) // ? command not found -> error?
 		return;
 	
-	// TODO: try-catch para excepciones de comandos ??? -> o lo gestiona cada comando internamente?
 	cmd->execute(server, client);
 
 	delete cmd;
@@ -33,7 +32,7 @@ std::string CommandParser::parseCommandName(std::string &line)
 
 void CommandParser::parseParams(std::string &line, std::vector<std::string> &params)
 {
-	while (true)
+	while (!line.empty())
 	{
 		// msg after : is read as 1 param and is always the last one
 		if (line[0] == ':')
