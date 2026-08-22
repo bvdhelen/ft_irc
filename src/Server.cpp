@@ -199,7 +199,6 @@ void Server::processData(std::string data, size_t& pollIndex)
 	{
 		std::string rawLine = client->getCommandFromBuffer();
 		
-		// TODO: try-catch para excepciones de comandos
 		CommandParser::parseAndExecute(rawLine, *this, *client);
 
 		//Después de ejecutar cada comando, revisar si el cliente debe desconectarse.

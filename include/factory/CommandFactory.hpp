@@ -3,7 +3,7 @@
 
 #include "ft_irc.hpp"
 
-class Command;
+#include "Command.hpp"
 
 class CommandFactory
 {

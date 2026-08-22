@@ -1,19 +1,24 @@
 #include "CommandParser.hpp"
+#include "Command.hpp"
+#include "CommandFactory.hpp"
 
 void CommandParser::parseAndExecute(std::string line, Server &server, Client &client)
 {
-	std::string command = parseCommand(line);
-
-	if (command.empty())
+	std::string commandName = parseCommand(line);
+	if (commandName.empty())
 		return;
 
 	std::vector<std::string> params;
 	parseParams(line, params);
 
-	// TODO: create command via CommandFactory and execute
-	// TODO: try-catch para excepciones de comandos
-	(void)server;
-	(void)client;
+	Command *cmd = CommandFactory::createCommand(commandName, params);
+	if (!cmd) // command not found -> error?
+		return;
+	
+	// TODO: try-catch para excepciones de comandos ??? -> o lo gestiona cada comando internamente?
+	cmd->execute(server, client);
+
+	delete cmd;
 }
 
 std::string CommandParser::parseCommand(std::string &line)
