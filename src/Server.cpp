@@ -197,9 +197,8 @@ void Server::processData(std::string data, size_t& pollIndex)
 	client->appendBuffer(data);
 	while (client->hasCommandBuffer())
 	{
-		std::string rawLine = client->getCommandFromBuffer();
-		
-		CommandParser::parseAndExecute(rawLine, *this, *client);
+		std::string command = client->getCommandFromBuffer();
+		CommandParser::parseAndExecute(command, *this, *client);
 
 		//Después de ejecutar cada comando, revisar si el cliente debe desconectarse.
 		if (client->hasRequestedDisconnection())

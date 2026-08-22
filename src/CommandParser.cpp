@@ -4,15 +4,13 @@
 
 void CommandParser::parseAndExecute(std::string line, Server &server, Client &client)
 {
-	std::string commandName = parseCommand(line);
-	if (commandName.empty())
-		return;
+	std::string commandName = parseCommandName(line);
 
 	std::vector<std::string> params;
 	parseParams(line, params);
 
 	Command *cmd = CommandFactory::createCommand(commandName, params);
-	if (!cmd) // command not found -> error?
+	if (!cmd) // ? command not found -> error?
 		return;
 	
 	// TODO: try-catch para excepciones de comandos ??? -> o lo gestiona cada comando internamente?
@@ -21,20 +19,15 @@ void CommandParser::parseAndExecute(std::string line, Server &server, Client &cl
 	delete cmd;
 }
 
-std::string CommandParser::parseCommand(std::string &line)
+std::string CommandParser::parseCommandName(std::string &line)
 {
-	std::string command;
 	std::string::size_type space = line.find(' ');
+	std::string command = line.substr(0, space);
 
 	if (space == std::string::npos)
-	{
-		command = line;
 		line.clear();
-		return command;
-	}
-
-	command = line.substr(0, space);
-	line = line.substr(space + 1);
+	else
+		line = line.substr(space + 1);
 	return command;
 }
 
