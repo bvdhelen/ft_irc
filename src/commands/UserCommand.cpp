@@ -12,7 +12,7 @@ void UserCommand::execute(Server &server, Client &client)
 {
 	if (client.isAuthenticated())
 	{
-		server.sendReplyToClient(&client, ERR_ALREADYREGISTERED, "You may not reregister");
+		server.sendReplyToClient(&client, ERR_ALREADYREGISTERED, "You may not re-registerr");
 		return ;
 	}
 	else if (_params.size() < 4)
