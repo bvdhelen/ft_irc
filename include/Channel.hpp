@@ -23,22 +23,25 @@ class Channel
 		Channel(const std::string &name, const std::string &password = "");
 		~Channel();
 
+		// getters
+		const std::string &getName() const;
+		const std::string &getTopic() const;
+		const std::set<Client *> &getClients() const;
+		const std::set<Client *> &getOperators() const;
+
 		// clients
 		void addClient(Client *client);
 		void removeClient(Client *client); //que no quede nadie dentro
 		bool hasClient(Client *client) const;
 		bool isEmpty() const;
-		const std::set<Client *> &getClients() const;
 
 		// operators
 		void addOperator(Client *client);
 		void removeOperator(Client *client);
 		bool isOperator(Client *client) const;
-		const std::set<Client *> &getOperators() const;
 
 		// topic
 		void setTopic(const std::string &topic);
-		const std::string &getTopic() const;
 
 		// modes
 		// mode - invite only
