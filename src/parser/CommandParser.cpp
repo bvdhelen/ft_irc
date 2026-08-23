@@ -1,6 +1,7 @@
 #include "parser/CommandParser.hpp"
 #include "commands/Command.hpp"
 #include "parser/CommandFactory.hpp"
+#include "Replies.hpp"
 
 void CommandParser::parseAndExecute(std::string line, Server &server, Client &client)
 {
@@ -10,8 +11,8 @@ void CommandParser::parseAndExecute(std::string line, Server &server, Client &cl
 	parseParams(line, params);
 
 	Command *cmd = CommandFactory::createCommand(commandName, params);
-	if (!cmd) // TODO @rub command not found -> send error 421
-		return;
+	if (!cmd)
+		return server.sendReplyToClient(&client, ERR_UNKNOWNCOMMAND, "Unknown command", commandName);
 	
 	cmd->execute(server, client);
 
