@@ -211,9 +211,9 @@ void Server::processData(std::string data, size_t& pollIndex)
 	}	
 }
 
-//Si hay que poner el nombre del comando antes del mensaje poner como mensaje: "<nombre> :<mensaje>"
-//Y si no: ":<mensaje>" Cuidado con los dos puntos.
-//Pero para no entorpecer vuestro trabajo, pondré un ':' al inicio de cada mensaje si no hay uno puesto.
+//If a name has to be indicated in the command before the message then the param message should be: "<name> :<message>"
+//If not: ":<message>" Be carefull with ':'
+//In order to not obstruct your work, this function will add a ':' at the start of the message if there isnt one already.
 void Server::sendReplyToClient(Client *client, int reply_number, const std::string& message)
 {
     std::stringstream ss;
@@ -234,8 +234,7 @@ void Server::sendReplyToClient(Client *client, int reply_number, const std::stri
 
     std::string fullMessage = ss.str();
 
-    if (send(client->getSocket(), fullMessage.c_str(), fullMessage.length(), 0) < 0)
-		client->setRequestedDisconnection(true);
+	sendReplyToClientRaw(client, fullMessage);
 }
 
 void Server::sendReplyToClientRaw(Client *client, const std::string& messageRaw)
