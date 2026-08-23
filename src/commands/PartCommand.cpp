@@ -46,26 +46,27 @@ void PartCommand::partChannel(Server &server, Client &client, const std::string 
     if (channel == NULL)
     {
         server.sendReplyToClient(
-            client.getSocket(),
+            &client,
             ERR_NOSUCHCHANNEL,
             "No such channel");
     }
     else if (!client.isInChannel(channel))
     {
         server.sendReplyToClient(
-            client.getSocket(),
+            &client,
             ERR_NOTONCHANNEL,
             "You're not on that channel");
     }
     else
     {
         message = ":" + client.getNickname() + "!"
-        + client.getUsername() + " PART "
+        + client.getUsername() + "@"
+        + client.getHost() + " PART "
         + channelName;
         if (_params.size() > 1)
-            message += " " + _params[1];
+            message += " :" + _params[1];
         message += "\r\n";
-        server.sendToChannel(channel, message);
+        server.sendToChannelRaw(channel, message);
         client.removeChannel(channel);
         if (channel->isEmpty())
             server.removeChannel(channel->getName());
@@ -80,7 +81,7 @@ void PartCommand::execute(Server &server, Client &client)
     if (_params.empty())
     {
         server.sendReplyToClient(
-            client.getSocket(),
+            &client,
             ERR_NEEDMOREPARAMS,
             "Not enough parameters");
         return ;
@@ -88,10 +89,8 @@ void PartCommand::execute(Server &server, Client &client)
     channels = splitChannels(_params[0]);
     if (channels.empty())
     {
-        //TODO: ¿que mensaje saca el protocolo?
-        //ta bien?
         server.sendReplyToClient(
-            client.getSocket(),
+            &client,
             ERR_NOSUCHCHANNEL,
             "No such channel");
         return ;
