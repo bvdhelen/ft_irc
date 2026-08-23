@@ -40,11 +40,11 @@ class Server
 		void run();
 		void closeServer();
 
-		//Send
-		void sendReplyToClient(Client *client, int reply_number, const std::string &message);
-		void sendToClient(Client *client, const std::string &message);
-		void sendToChannel(Channel *channel, const std::string &message);
-		void sendToChannelExcept(Channel *channel, Client *excluded, const std::string &message);
+		void sendReplyToClient(Client *client, int reply_number, const std::string& message, const std::string& command_name = "");
+		void sendReplyToClientRaw(Client *client, const std::string& messageRaw);
+
+		void sendToChannelRaw(Channel *channel, const std::string& messageRaw);
+		void sendToChannelExceptRaw(Channel *channel, Client *clientExcept, const std::string& messageRaw);
 
 		//Getters (more can be done)
 		const std::string& getPassword();
