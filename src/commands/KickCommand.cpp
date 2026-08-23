@@ -19,7 +19,7 @@ void KickCommand::kickClient(Server &server, Client &client, const std::string &
 	if (channel == NULL)
 	{
 		server.sendReplyToClient(
-			client.getSocket(),
+			&client,
 			ERR_NOSUCHCHANNEL,
 			"No such channel");
 		return ;
@@ -27,7 +27,7 @@ void KickCommand::kickClient(Server &server, Client &client, const std::string &
 	if (!client.isInChannel(channel))
 	{
 		server.sendReplyToClient(
-			client.getSocket(),
+			&client,
 			ERR_NOTONCHANNEL,
 			"You're not on that channel");
 		return ;
@@ -35,7 +35,7 @@ void KickCommand::kickClient(Server &server, Client &client, const std::string &
 	if (!channel->isOperator(&client))
 	{
 		server.sendReplyToClient(
-			client.getSocket(),
+			&client,
 			ERR_CHANOPRIVSNEEDED,
 			"You're not channel operator");
 		return ;
@@ -44,7 +44,7 @@ void KickCommand::kickClient(Server &server, Client &client, const std::string &
 	if (target == NULL)
 	{
 		server.sendReplyToClient(
-			client.getSocket(),
+			&client,
 			ERR_NOSUCHNICK,
 			"No such nick");
 		return ;
@@ -52,19 +52,20 @@ void KickCommand::kickClient(Server &server, Client &client, const std::string &
 	if (!target->isInChannel(channel))
 	{
 		server.sendReplyToClient(
-			client.getSocket(),
+			&client,
 			ERR_USERNOTINCHANNEL,
 			"They are not on that channel");
 		return ;
 	}
 	message = ":" + client.getNickname() + "!"
-		+ client.getUsername() + " KICK "
+		+ client.getUsername() + "@"
+    	+ client.getHost() + " KICK "
 		+ channel->getName() + " "
 		+ target->getNickname();
     if (_params.size() > 2)
         message += " :" + _params[2];
     message += "\r\n";
-	server.sendToChannel(channel, message);
+	server.sendToChannelRaw(channel, message);
 	target->removeChannel(channel);
     if (channel->isEmpty())
         server.removeChannel(channel->getName());
@@ -75,7 +76,7 @@ void KickCommand::execute(Server &server, Client &client)
     if (_params.size() < 2)
 	{
 		server.sendReplyToClient(
-			client.getSocket(),
+			&client,
 			ERR_NEEDMOREPARAMS,
 			"Not enough parameters");
 		return ;

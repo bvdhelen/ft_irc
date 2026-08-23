@@ -14,13 +14,13 @@ void TopicCommand::sendCurrentTopic(Server &server, Client &client, Channel *cha
 	if (channel->getTopic().empty())
 	{
 		server.sendReplyToClient(
-			client.getSocket(),
+			&client,
 			RPL_NOTOPIC,
 			"No topic is set");
 		return ;
 	}
 	server.sendReplyToClient(
-		client.getSocket(),
+		&client,
 		RPL_TOPIC,
 		channel->getTopic());
 }
@@ -33,16 +33,17 @@ void TopicCommand::setTopic(Server &server, Client &client, Channel *channel, co
 		&& !channel->isOperator(&client))
 	{
 		server.sendReplyToClient(
-			client.getSocket(),
+			&client,
 			ERR_CHANOPRIVSNEEDED,
 			"You're not channel operator");
 		return ;
 	}
 	channel->setTopic(topic);
 	message = ":" + client.getNickname() + "!"
-		+ client.getUsername() + " TOPIC "
+		+ client.getUsername() + "@"
+    	+ client.getHost() + " TOPIC "
 		+ channel->getName() + " :" + topic + "\r\n";
-	server.sendToChannel(channel, message);
+	server.sendToChannelRaw(channel, message);
 }
 
 void TopicCommand::execute(Server &server, Client &client)
@@ -52,24 +53,18 @@ void TopicCommand::execute(Server &server, Client &client)
 	if (_params.empty())
 	{
 		server.sendReplyToClient(
-			client.getSocket(),
+			&client,
 			ERR_NEEDMOREPARAMS,
 			"Not enough parameters");
 		return ;
 	}
 	if (_params.size() > 2)
-	{
-		server.sendReplyToClient(
-			client.getSocket(),
-			ERR_NEEDMOREPARAMS,
-			"Too many parameters");
 		return ;
-	}
 	channel = server.getChannelByName(_params[0]);
 	if (channel == NULL)
 	{
 		server.sendReplyToClient(
-			client.getSocket(),
+			&client,
 			ERR_NOSUCHCHANNEL,
 			"No such channel");
 		return ;
@@ -77,7 +72,7 @@ void TopicCommand::execute(Server &server, Client &client)
 	if (!channel->hasClient(&client))
 	{
 		server.sendReplyToClient(
-			client.getSocket(),
+			&client,
 			ERR_NOTONCHANNEL,
 			"You're not on that channel");
 		return ;
