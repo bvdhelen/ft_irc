@@ -201,6 +201,7 @@ void Server::processData(std::string data, size_t& pollIndex)
 		std::cout << "Command received: |" << command << "|" << std::endl;
 		//TODO: Parser here!
 
+
 		//Después de ejecutar cada comando, revisar si el cliente debe desconectarse.
 		if (client->hasRequestedDisconnection())
 		{
@@ -210,12 +211,64 @@ void Server::processData(std::string data, size_t& pollIndex)
 	}	
 }
 
-//
-void Server::sendReplyToClient(int clientfd, int reply_number, const std::string& message)
+
+void Server::sendReplyToClient(Client *client, int reply_number, const std::string& message, const std::string& command_name)
 {
-	(void)clientfd;
-	(void)reply_number;
-	(void)message;
+    std::stringstream ss;
+    ss << ":ft_irc ";
+    
+    // Rellenar con ceros a la izquierda si tiene menos de 3 cifras
+    if (reply_number < 10) ss << "00";
+    else if (reply_number < 100) ss << "0";
+    ss << reply_number << " ";
+
+	if (!client->getHasNick())
+		ss << "* ";
+	else
+		ss << client->getNickname() << " ";
+	if (command_name != "")
+		ss << command_name << " ";
+	ss << ":" << message << "\r\n";
+
+    std::string fullMessage = ss.str();
+
+	sendReplyToClientRaw(client, fullMessage);
+}
+
+void Server::sendReplyToClientRaw(Client *client, const std::string& messageRaw)
+{
+	if (send(client->getSocket(), messageRaw.c_str(), messageRaw.length(), 0) < 0)
+		client->setRequestedDisconnection(true);
+}
+
+void Server::sendToChannelRaw(Channel *channel, const std::string &messageRaw)
+{
+	if (channel == NULL)
+		return ;
+	const std::set<Client*>& clients = channel->getClients();
+	std::set<Client *>::const_iterator it = clients.begin();
+
+	for(; it != clients.end(); it++)
+	{
+		Client *client = *it;
+		sendReplyToClientRaw(client, messageRaw);
+	}
+}
+
+void Server::sendToChannelExceptRaw(Channel *channel, Client *clientExcept, const std::string &messageRaw)
+{
+	if (channel == NULL || clientExcept == NULL)
+		return ;
+	const std::set<Client*>& clients = channel->getClients();
+	std::set<Client *>::const_iterator it = clients.begin();
+
+	for(; it != clients.end(); it++)
+	{
+		Client *client = *it;
+		if (client == clientExcept)
+			continue;
+		sendReplyToClientRaw(client, messageRaw);
+	}
 }
 
 const std::string &Server::getPassword()

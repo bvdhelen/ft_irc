@@ -36,5 +36,6 @@
 #include <cstdlib>
 #include <exception>
 #include <cerrno>
+#include <sstream>
 
 #endif
