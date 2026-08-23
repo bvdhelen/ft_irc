@@ -3,13 +3,13 @@
 
 #include "ft_irc.hpp"
 
-class Command;
+#include "commands/Command.hpp"
 
 class CommandFactory
 {
 	public:
 		static Command *createCommand(
-			const std::string &commandName,
+			std::string commandName,
 			const std::vector<std::string> &params);
 };
 
