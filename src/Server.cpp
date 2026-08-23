@@ -340,12 +340,18 @@ void Server::removeChannel(const std::string &name)
 void Server::removeEmptyChannels()
 {
     std::map<std::string, Channel>::iterator it;
+	std::map<std::string, Channel>::iterator next;
 
     it = _channels.begin();
     while (it != _channels.end())
     {
         if (it->second.isEmpty())
-            _channels.erase(it++);
+		{
+			next = it;
+			++next;
+            _channels.erase(it);
+			it = next;
+		}
         else
             ++it;
     }
