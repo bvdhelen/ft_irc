@@ -14,6 +14,7 @@ class Client
         std::string _nickname;
         std::string _username;
         std::string _realname;
+        std::string _host;
 
         // Buffer donde se almacenan los datos recibidos
         std::string _buffer;
@@ -37,6 +38,7 @@ class Client
         const std::string &getNickname() const;
         const std::string &getUsername() const;
         const std::string &getRealname() const;
+        const std::string &getHost() const;
         const std::string &getBuffer() const;
         bool getPassOk() const;
         bool getHasNick() const;
@@ -51,6 +53,7 @@ class Client
         void setNickname(const std::string &nickname);
         void setUsername(const std::string &username);
         void setRealname(const std::string &realname);
+        void setHost(const std::string &host);
 
         void setPassOk(bool value);
         void setHasNick(bool value);

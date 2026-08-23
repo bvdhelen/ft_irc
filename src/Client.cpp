@@ -7,6 +7,7 @@ Client::Client(int socket)
       _nickname(""),
       _username(""),
       _realname(""),
+      _host(""),
       _buffer(""),
       _passOk(false),
       _hasNick(false),
@@ -40,6 +41,11 @@ const std::string &Client::getUsername() const
 const std::string &Client::getRealname() const
 {
     return _realname;
+}
+
+const std::string &Client::getHost() const
+{
+    return _host;
 }
 
 const std::string &Client::getBuffer() const
@@ -96,6 +102,11 @@ void Client::setUsername(const std::string &username)
 void Client::setRealname(const std::string &realname)
 {
     _realname = realname;
+}
+
+void Client::setHost(const std::string &host)
+{
+    _host = host;
 }
 
 void Client::setPassOk(bool value)

@@ -1,4 +1,5 @@
 #include "Server.hpp"
+#include "parser/CommandParser.hpp"
 
 
 volatile sig_atomic_t Server::_isRunning = false;
@@ -142,6 +143,9 @@ void Server::acceptClient(int serverfd)
 	_pollfds.push_back(server_pfd);
 
 	_clients.insert(std::pair<int, Client>(clientSocket, Client(clientSocket)));
+	Client *client = getClientBySocket(clientSocket);
+    if (client != NULL)
+		client->setHost(inet_ntoa(clientSck.sin_addr));
 	std::cout << "A client has been accepted." << std::endl;
 }
 
@@ -197,9 +201,7 @@ void Server::processData(std::string data, size_t& pollIndex)
 	while (client->hasCommandBuffer())
 	{
 		std::string command = client->getCommandFromBuffer();
-		//This line its only for debbuging purposes.
-		std::cout << "Command received: |" << command << "|" << std::endl;
-		//TODO: Parser here!
+		CommandParser::parseAndExecute(command, *this, *client);
 
 
 		//Después de ejecutar cada comando, revisar si el cliente debe desconectarse.
