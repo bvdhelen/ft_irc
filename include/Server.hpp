@@ -53,6 +53,8 @@ class Server
 		Client *getClientBySocket(int socket);
 		Client *getClientByNick(const std::string &nickToSearch);
 		Channel *getChannelByName(const std::string &name);
+		void removeChannel(const std::string &name);
+		void removeEmptyChannels();
 
 		//Exceptions:
 		class SocketFileDescriptorException : public std::exception
