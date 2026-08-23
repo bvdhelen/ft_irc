@@ -1,6 +1,8 @@
 #include "Server.hpp"
 #include "parser/CommandParser.hpp"
-
+#include "commands/PassCommand.hpp"
+#include "commands/UserCommand.hpp"
+#include "commands/NickCommand.hpp"
 
 volatile sig_atomic_t Server::_isRunning = false;
 
@@ -202,8 +204,6 @@ void Server::processData(std::string data, size_t& pollIndex)
 	{
 		std::string command = client->getCommandFromBuffer();
 		CommandParser::parseAndExecute(command, *this, *client);
-
-
 
 		//Después de ejecutar cada comando, revisar si el cliente debe desconectarse.
 		if (client->hasRequestedDisconnection())

@@ -1,4 +1,8 @@
 #include "parser/CommandFactory.hpp"
+#include "commands/PassCommand.hpp"
+#include "commands/UserCommand.hpp"
+#include "commands/NickCommand.hpp"
+
 
 static void toUpper(std::string &s);
 
@@ -9,9 +13,9 @@ Command *CommandFactory::createCommand(std::string commandName, const std::vecto
 
 	// TODO: add/uncomment commands as they are implemented
 	// if (commandName == "JOIN")		return new JoinCommand(params);
-	// if (commandName == "NICK")		return new NickCommand(params);
-	// if (commandName == "USER")		return new UserCommand(params);
-	// if (commandName == "PASS")		return new PassCommand(params);
+	if (commandName == "NICK")		return new NickCommand(params);
+	if (commandName == "USER")		return new UserCommand(params);
+	if (commandName == "PASS")		return new PassCommand(params);
 	// if (commandName == "PRIVMSG")	return new PrivmsgCommand(params);
 	// if (commandName == "PART")		return new PartCommand(params);
 	// if (commandName == "QUIT")		return new QuitCommand(params);
