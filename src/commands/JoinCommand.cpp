@@ -48,22 +48,51 @@ void JoinCommand::execute(Server &server, Client &client)
     {
         if (_params.size() < 2)
         {
-            // ERR_BADCHANNELKEY
+            server.sendReplyToClient(client,
+                ERR_BADCHANNELKEY,
+                channelName + " :Cannot join channel (+k)");
             return ;
         }
         if (!channel->checkPassword(_params[1]))
         {
-            // ERR_BADCHANNELKEY
+            server.sendReplyToClient(client,
+                ERR_BADCHANNELKEY,
+                channelName + " :Cannot join channel (+k)");
             return ;
         }
     }
     if (channel->isFull())
     {
-        // ERR_CHANNELISFULL
+        server.sendReplyToClient(client,
+            ERR_CHANNELISFULL,
+            channelName + " :Cannot join channel (+l)");
         return ;
     }
     client.addChannel(channel);
-    // Aquí enviaremos JOIN
-    // Aquí enviaremos TOPIC
-    // Aquí enviaremos NAMES
+    
+    // Enviar JOIN, TOPIC, NAMES (igual que en la creación)
+    std::string joinMsg = ":" + client.getNickname() + "!" + client.getUsername() +
+                          "@" + client.getHostname() + " JOIN " + channelName;
+    server.sendToChannel(channel, joinMsg);
+
+    if (!channel->getTopic().empty())
+        server.sendReplyToClient(client, RPL_TOPIC,
+                                 channelName + " :" + channel->getTopic());
+    else
+        server.sendReplyToClient(client, RPL_NOTOPIC,
+                                 channelName + " :No topic is set");
+
+    // Enviar NAMES (igual que en createAndJoinNewChannel)
+    std::string namesList;
+    const std::set<Client*>& clients = channel->getClients();
+    for (std::set<Client*>::const_iterator it = clients.begin(); it != clients.end(); ++it)
+    {
+        if (it != clients.begin())
+            namesList += " ";
+        if (channel->isOperator(*it))
+            namesList += "@";
+        namesList += (*it)->getNickname();
+    }
+    server.sendReplyToClient(client, RPL_NAMREPLY, "= " + channelName + " :" + namesList);
+    server.sendReplyToClient(client, RPL_ENDOFNAMES, channelName + " :End of NAMES list");
 }
