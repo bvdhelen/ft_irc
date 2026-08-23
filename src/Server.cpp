@@ -1,4 +1,5 @@
 #include "Server.hpp"
+#include "parser/CommandParser.hpp"
 
 
 volatile sig_atomic_t Server::_isRunning = false;
@@ -197,9 +198,7 @@ void Server::processData(std::string data, size_t& pollIndex)
 	while (client->hasCommandBuffer())
 	{
 		std::string command = client->getCommandFromBuffer();
-		//This line its only for debbuging purposes.
-		std::cout << "Command received: |" << command << "|" << std::endl;
-		//TODO: Parser here!
+		CommandParser::parseAndExecute(command, *this, *client);
 
 
 		//Después de ejecutar cada comando, revisar si el cliente debe desconectarse.
