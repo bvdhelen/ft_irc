@@ -40,7 +40,7 @@ class Server
 		void run();
 		void closeServer();
 
-		void sendReplyToClient(Client *client, int reply_number, const std::string& message);
+		void sendReplyToClient(Client *client, int reply_number, const std::string& message, const std::string& command_name = "");
 		void sendReplyToClientRaw(Client *client, const std::string& messageRaw);
 
 		void sendToChannelRaw(Channel *channel, const std::string& messageRaw);

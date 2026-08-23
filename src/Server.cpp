@@ -211,10 +211,8 @@ void Server::processData(std::string data, size_t& pollIndex)
 	}	
 }
 
-//If a name has to be indicated in the command before the message then the param message should be: "<name> :<message>"
-//If not: ":<message>" Be carefull with ':'
-//In order to not obstruct your work, this function will add a ':' at the start of the message if there isnt one already.
-void Server::sendReplyToClient(Client *client, int reply_number, const std::string& message)
+
+void Server::sendReplyToClient(Client *client, int reply_number, const std::string& message, const std::string& command_name)
 {
     std::stringstream ss;
     ss << ":ft_irc ";
@@ -228,9 +226,9 @@ void Server::sendReplyToClient(Client *client, int reply_number, const std::stri
 		ss << "* ";
 	else
 		ss << client->getNickname() << " ";
-	if (message.find(':') == std::string::npos)
-		ss << ":";
-    ss << message << "\r\n";
+	if (command_name != "")
+		ss << command_name << " ";
+	ss << ":" << message << "\r\n";
 
     std::string fullMessage = ss.str();
 
