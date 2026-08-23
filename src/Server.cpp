@@ -213,7 +213,6 @@ void Server::processData(std::string data, size_t& pollIndex)
 	}	
 }
 
-
 void Server::sendReplyToClient(Client *client, int reply_number, const std::string& message, const std::string& command_name)
 {
     std::stringstream ss;
@@ -271,36 +270,6 @@ void Server::sendToChannelExceptRaw(Channel *channel, Client *clientExcept, cons
 			continue;
 		sendReplyToClientRaw(client, messageRaw);
 	}
-}
-
-void Server::sendToClient(Client *client, const std::string &message)
-{
-    send(client->getSocket(), message.c_str(), message.size(), 0);
-}
-
-void Server::sendToChannel(Channel *channel, const std::string &message)
-{
-    std::set<Client *>::const_iterator it;
-
-	it = channel->getClients().begin();
-	while (it != channel->getClients().end())
-	{
-		sendToClient(*it, message);
-		++it;
-	}
-}
-
-void Server::sendToChannelExcept(Channel *channel, Client *excluded, const std::string &message)
-{
-    std::set<Client *>::const_iterator it;
-
-    it = channel->getClients().begin();
-    while (it != channel->getClients().end())
-    {
-        if (*it != excluded)
-			sendToClient(*it, message);
-        ++it;
-    }
 }
 
 const std::string &Server::getPassword()
