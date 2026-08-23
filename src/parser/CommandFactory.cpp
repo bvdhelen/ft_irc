@@ -1,8 +1,12 @@
 #include "parser/CommandFactory.hpp"
 
-Command *CommandFactory::createCommand(const std::string &commandName, const std::vector<std::string> &params)
+static void toUpper(std::string &s);
+
+Command *CommandFactory::createCommand(std::string commandName, const std::vector<std::string> &params)
 {
-	(void)commandName, (void)params; // TODO delete this line when 1st command is implemented
+	(void)params; // TODO delete this line when 1st command is implemented
+	toUpper(commandName);
+
 	// TODO: add/uncomment commands as they are implemented
 	// if (commandName == "JOIN")		return new JoinCommand(params);
 	// if (commandName == "NICK")		return new NickCommand(params);
@@ -17,4 +21,10 @@ Command *CommandFactory::createCommand(const std::string &commandName, const std
 	// if (commandName == "MODE")		return new ModeCommand(params);
 	
 	return NULL; // default if no command is found
+}
+
+static void toUpper(std::string &s)
+{
+	for (size_t i = 0; i < s.length(); i++)
+        s[i] = toupper(s[i]);
 }

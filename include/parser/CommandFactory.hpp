@@ -9,7 +9,7 @@ class CommandFactory
 {
 	public:
 		static Command *createCommand(
-			const std::string &commandName,
+			std::string commandName,
 			const std::vector<std::string> &params);
 };
 
