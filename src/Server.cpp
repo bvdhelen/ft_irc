@@ -143,6 +143,9 @@ void Server::acceptClient(int serverfd)
 	_pollfds.push_back(server_pfd);
 
 	_clients.insert(std::pair<int, Client>(clientSocket, Client(clientSocket)));
+	Client *client = getClientBySocket(clientSocket);
+    if (client != NULL)
+		client->setHost(inet_ntoa(clientSck.sin_addr));
 	std::cout << "A client has been accepted." << std::endl;
 }
 
