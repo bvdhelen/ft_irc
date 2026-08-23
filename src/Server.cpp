@@ -1,4 +1,5 @@
 #include "Server.hpp"
+#include "parser/CommandParser.hpp"
 
 
 volatile sig_atomic_t Server::_isRunning = false;
@@ -142,6 +143,9 @@ void Server::acceptClient(int serverfd)
 	_pollfds.push_back(server_pfd);
 
 	_clients.insert(std::pair<int, Client>(clientSocket, Client(clientSocket)));
+	Client *client = getClientBySocket(clientSocket);
+    if (client != NULL)
+		client->setHost(inet_ntoa(clientSck.sin_addr));
 	std::cout << "A client has been accepted." << std::endl;
 }
 
@@ -197,9 +201,8 @@ void Server::processData(std::string data, size_t& pollIndex)
 	while (client->hasCommandBuffer())
 	{
 		std::string command = client->getCommandFromBuffer();
-		//This line its only for debbuging purposes.
-		std::cout << "Command received: |" << command << "|" << std::endl;
-		//TODO: Parser here!
+		CommandParser::parseAndExecute(command, *this, *client);
+
 
 		//Después de ejecutar cada comando, revisar si el cliente debe desconectarse.
 		if (client->hasRequestedDisconnection())
@@ -210,12 +213,63 @@ void Server::processData(std::string data, size_t& pollIndex)
 	}	
 }
 
-//
-void Server::sendReplyToClient(int clientfd, int reply_number, const std::string& message)
+void Server::sendReplyToClient(Client *client, int reply_number, const std::string& message, const std::string& command_name)
 {
-	(void)clientfd;
-	(void)reply_number;
-	(void)message;
+    std::stringstream ss;
+    ss << ":ft_irc ";
+    
+    // Rellenar con ceros a la izquierda si tiene menos de 3 cifras
+    if (reply_number < 10) ss << "00";
+    else if (reply_number < 100) ss << "0";
+    ss << reply_number << " ";
+
+	if (!client->getHasNick())
+		ss << "* ";
+	else
+		ss << client->getNickname() << " ";
+	if (command_name != "")
+		ss << command_name << " ";
+	ss << ":" << message << "\r\n";
+
+    std::string fullMessage = ss.str();
+
+	sendReplyToClientRaw(client, fullMessage);
+}
+
+void Server::sendReplyToClientRaw(Client *client, const std::string& messageRaw)
+{
+	if (send(client->getSocket(), messageRaw.c_str(), messageRaw.length(), 0) < 0)
+		client->setRequestedDisconnection(true);
+}
+
+void Server::sendToChannelRaw(Channel *channel, const std::string &messageRaw)
+{
+	if (channel == NULL)
+		return ;
+	const std::set<Client*>& clients = channel->getClients();
+	std::set<Client *>::const_iterator it = clients.begin();
+
+	for(; it != clients.end(); it++)
+	{
+		Client *client = *it;
+		sendReplyToClientRaw(client, messageRaw);
+	}
+}
+
+void Server::sendToChannelExceptRaw(Channel *channel, Client *clientExcept, const std::string &messageRaw)
+{
+	if (channel == NULL || clientExcept == NULL)
+		return ;
+	const std::set<Client*>& clients = channel->getClients();
+	std::set<Client *>::const_iterator it = clients.begin();
+
+	for(; it != clients.end(); it++)
+	{
+		Client *client = *it;
+		if (client == clientExcept)
+			continue;
+		sendReplyToClientRaw(client, messageRaw);
+	}
 }
 
 const std::string &Server::getPassword()
@@ -276,6 +330,31 @@ Channel *Server::getChannelByName(const std::string &name)
     if (it != _channels.end())
         return &(it->second);
     return NULL;
+}
+
+void Server::removeChannel(const std::string &name)
+{
+    _channels.erase(name);
+}
+
+void Server::removeEmptyChannels()
+{
+    std::map<std::string, Channel>::iterator it;
+	std::map<std::string, Channel>::iterator next;
+
+    it = _channels.begin();
+    while (it != _channels.end())
+    {
+        if (it->second.isEmpty())
+		{
+			next = it;
+			++next;
+            _channels.erase(it);
+			it = next;
+		}
+        else
+            ++it;
+    }
 }
 
 //TODO: Envíar mensaje a cliente con algo parecido a "Connection closed by server"
