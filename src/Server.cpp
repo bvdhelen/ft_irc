@@ -214,7 +214,6 @@ void Server::processData(std::string data, size_t& pollIndex)
 	}	
 }
 
-
 void Server::sendReplyToClient(Client *client, int reply_number, const std::string& message, const std::string& command_name)
 {
     std::stringstream ss;
@@ -332,6 +331,31 @@ Channel *Server::getChannelByName(const std::string &name)
     if (it != _channels.end())
         return &(it->second);
     return NULL;
+}
+
+void Server::removeChannel(const std::string &name)
+{
+    _channels.erase(name);
+}
+
+void Server::removeEmptyChannels()
+{
+    std::map<std::string, Channel>::iterator it;
+	std::map<std::string, Channel>::iterator next;
+
+    it = _channels.begin();
+    while (it != _channels.end())
+    {
+        if (it->second.isEmpty())
+		{
+			next = it;
+			++next;
+            _channels.erase(it);
+			it = next;
+		}
+        else
+            ++it;
+    }
 }
 
 //TODO: Envíar mensaje a cliente con algo parecido a "Connection closed by server"
