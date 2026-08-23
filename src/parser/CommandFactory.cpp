@@ -1,4 +1,4 @@
-#include "factory/CommandFactory.hpp"
+#include "parser/CommandFactory.hpp"
 
 Command *CommandFactory::createCommand(const std::string &commandName, const std::vector<std::string> &params)
 {
