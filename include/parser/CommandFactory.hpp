@@ -4,6 +4,8 @@
 #include "ft_irc.hpp"
 
 #include "commands/Command.hpp"
+# include "commands/KickCommand.hpp"
+# include "commands/TopicCommand.hpp"
 
 class CommandFactory
 {

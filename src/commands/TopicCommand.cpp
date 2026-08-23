@@ -1,4 +1,4 @@
-#include "TopicCommand.hpp"
+#include "commands/TopicCommand.hpp"
 
 TopicCommand::TopicCommand(const std::vector<std::string> &params)
 {
@@ -22,7 +22,8 @@ void TopicCommand::sendCurrentTopic(Server &server, Client &client, Channel *cha
 	server.sendReplyToClient(
 		&client,
 		RPL_TOPIC,
-		channel->getTopic());
+		channel->getTopic(),
+		channel->getName());
 }
 
 void TopicCommand::setTopic(Server &server, Client &client, Channel *channel, const std::string &topic)

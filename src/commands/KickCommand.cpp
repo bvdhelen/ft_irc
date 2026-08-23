@@ -1,4 +1,4 @@
-#include "KickCommand.hpp"
+#include "commands/KickCommand.hpp"
 
 KickCommand::KickCommand(const std::vector<std::string> &params)
 {
