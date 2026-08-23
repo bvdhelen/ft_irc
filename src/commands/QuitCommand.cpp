@@ -1,4 +1,4 @@
-#include "QuitCommand.hpp"
+#include "commands/QuitCommand.hpp"
 
 QuitCommand::QuitCommand(const std::vector<std::string> &params)
 {

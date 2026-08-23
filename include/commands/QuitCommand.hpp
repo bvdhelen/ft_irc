@@ -1,10 +1,9 @@
 #ifndef QUITCOMMAND_HPP
 # define QUITCOMMAND_HPP
 
-#include "Replies.hpp"
-#include "Command.hpp"
-#include "Server.hpp"
-#include "Client.hpp"
+# include "Replies.hpp"
+# include "Command.hpp"
+# include "Client.hpp"
 
 class QuitCommand : public Command
 {

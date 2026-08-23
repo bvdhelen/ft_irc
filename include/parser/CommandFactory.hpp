@@ -4,6 +4,8 @@
 #include "ft_irc.hpp"
 
 #include "commands/Command.hpp"
+# include "commands/PartCommand.hpp"
+# include "commands/QuitCommand.hpp"
 
 class CommandFactory
 {

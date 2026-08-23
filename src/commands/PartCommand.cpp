@@ -1,4 +1,4 @@
-#include "PartCommand.hpp"
+#include "commands/PartCommand.hpp"
 
 PartCommand::PartCommand(const std::vector<std::string> &params)
 {
