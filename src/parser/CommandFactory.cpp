@@ -1,4 +1,6 @@
 #include "parser/CommandFactory.hpp"
+#include "commands/PartCommand.hpp"
+#include "commands/QuitCommand.hpp"
 
 static void toUpper(std::string &s);
 
@@ -12,10 +14,8 @@ Command *CommandFactory::createCommand(std::string commandName, const std::vecto
 	// if (commandName == "USER")		return new UserCommand(params);
 	// if (commandName == "PASS")		return new PassCommand(params);
 	// if (commandName == "PRIVMSG")	return new PrivmsgCommand(params);
-	if (commandName == "PART")
-		return new PartCommand(params);
-	if (commandName == "QUIT")
-		return new QuitCommand(params);
+	if (commandName == "PART")			return new PartCommand(params);
+	if (commandName == "QUIT")			return new QuitCommand(params);
 	// if (commandName == "KICK")		return new KickCommand(params);
 	// if (commandName == "INVITE")		return new InviteCommand(params);
 	// if (commandName == "TOPIC")		return new TopicCommand(params);
