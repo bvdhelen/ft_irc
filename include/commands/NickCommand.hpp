@@ -7,7 +7,7 @@
 class NickCommand : public Command
 {
 	public:
-		NickCommand(std::vector<std::string> params);
+		NickCommand(const std::vector<std::string>& params);
 		~NickCommand();
 
 		void notifyClients(Server& server, Client& client, std::string oldNickname, std::string newNickname);

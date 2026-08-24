@@ -1,6 +1,6 @@
 #include "commands/UserCommand.hpp"
 
-UserCommand::UserCommand(std::vector<std::string> params)
+UserCommand::UserCommand(const std::vector<std::string>& params)
 {
 	_params = params;
 }

@@ -7,7 +7,7 @@
 class PassCommand : public Command
 {
 	public:
-		PassCommand(std::vector<std::string> params);
+		PassCommand(const std::vector<std::string>& params);
 		~PassCommand();
 
 		void execute(Server& server, Client& client);

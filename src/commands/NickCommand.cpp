@@ -1,7 +1,7 @@
 #include "commands/NickCommand.hpp"
 #include <cctype>
 
-NickCommand::NickCommand(std::vector<std::string> params)
+NickCommand::NickCommand(const std::vector<std::string>& params)
 {
 	_params = params;
 }
@@ -67,6 +67,8 @@ void NickCommand::execute(Server &server, Client &client)
 		server.sendReplyToClient(&client, ERR_NONICKNAMEGIVEN, "No nickname given.");
 		return;
 	}
+	else if (client.getHasNick() && client.getNickname() .compare(_params[0]) == 0)
+		return;
 	
 	std::string nick = _params[0].substr(0, 9);
 	if (!isValidNickname(nick))

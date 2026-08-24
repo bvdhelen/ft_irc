@@ -1,6 +1,6 @@
 #include "commands/PassCommand.hpp"
 
-PassCommand::PassCommand(std::vector<std::string> params)
+PassCommand::PassCommand(const std::vector<std::string>& params)
 {
 	_params = params;
 }

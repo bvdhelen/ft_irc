@@ -7,7 +7,7 @@
 class UserCommand : public Command
 {
 	public:
-		UserCommand(std::vector<std::string> params);
+		UserCommand(const std::vector<std::string>& params);
 		~UserCommand();
 
 		void execute(Server& server, Client& client);
