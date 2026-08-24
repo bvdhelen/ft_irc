@@ -19,6 +19,27 @@ Channel::~Channel()
 {
 }
 
+// Getters
+const std::string &Channel::getName() const
+{
+    return _name;
+}
+
+const std::string &Channel::getTopic() const
+{
+    return _topic;
+}
+
+const std::set<Client *> &Channel::getClients() const
+{
+    return _clients;
+}
+
+const std::set<Client *> &Channel::getOperators() const
+{
+    return _operators;
+}
+
 // Clients
 void Channel::addClient(Client *client)
 {
@@ -41,11 +62,6 @@ bool Channel::hasClient(Client *client) const
 bool Channel::isEmpty() const
 {
 	return _clients.empty();
-}
-
-const std::set<Client *> &Channel::getClients() const
-{
-    return _clients;
 }
 
 // Operators
@@ -90,11 +106,6 @@ bool Channel::isInvited(Client *client) const
 void Channel::setTopic(const std::string &topic)
 {
 	_topic = topic;
-}
-
-const std::string &Channel::getTopic() const
-{
-	return _topic;
 }
 
 // Modes - invite only
