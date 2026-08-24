@@ -56,7 +56,8 @@ void TopicCommand::execute(Server &server, Client &client)
 		server.sendReplyToClient(
 			&client,
 			ERR_NEEDMOREPARAMS,
-			"Not enough parameters");
+			"Not enough parameters",
+			"TOPIC");
 		return ;
 	}
 	if (_params.size() > 2)

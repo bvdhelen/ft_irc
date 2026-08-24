@@ -78,7 +78,8 @@ void KickCommand::execute(Server &server, Client &client)
 		server.sendReplyToClient(
 			&client,
 			ERR_NEEDMOREPARAMS,
-			"Not enough parameters");
+			"Not enough parameters",
+			"KICK");
 		return ;
 	}
 	kickClient(server, client, _params[0], _params[1]);
