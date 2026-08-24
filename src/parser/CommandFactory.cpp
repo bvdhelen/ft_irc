@@ -1,4 +1,5 @@
 #include "parser/CommandFactory.hpp"
+#include "commands/PingCommand.hpp"
 #include "commands/PartCommand.hpp"
 #include "commands/QuitCommand.hpp"
 
@@ -20,6 +21,7 @@ Command *CommandFactory::createCommand(std::string commandName, const std::vecto
 	// if (commandName == "INVITE")		return new InviteCommand(params);
 	// if (commandName == "TOPIC")		return new TopicCommand(params);
 	// if (commandName == "MODE")		return new ModeCommand(params);
+	if (commandName == "PING")		return new PingCommand(params);
 	
 	return NULL; // default if no command is found
 }
