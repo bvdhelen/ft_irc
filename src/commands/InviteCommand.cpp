@@ -20,7 +20,8 @@ void InviteCommand::execute(Server &server, Client &client)
         server.sendReplyToClient(
             &client,
             ERR_NEEDMOREPARAMS,
-            "Not enough parameters");
+            "Not enough parameters",
+            "INVITE");
         return ;
     }
     target = server.getClientByNick(_params[0]);
