@@ -34,7 +34,9 @@ SRCS =  src/main.cpp \
 		src/commands/PingCommand.cpp \
 		src/commands/PassCommand.cpp \
 		src/commands/NickCommand.cpp \
-		src/commands/UserCommand.cpp
+		src/commands/UserCommand.cpp \
+		src/commands/TopicCommand.cpp \
+		src/commands/KickCommand.cpp
 
 OBJS = $(SRCS:%.cpp=$(OBJ_DIR)/%.o)
 
