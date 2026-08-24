@@ -29,6 +29,9 @@ SRCS =  src/main.cpp \
 		src/parser/CommandParser.cpp \
 		src/parser/CommandFactory.cpp \
 		src/commands/Command.cpp \
+		src/commands/PartCommand.cpp \
+		src/commands/QuitCommand.cpp \
+		src/commands/PingCommand.cpp \
 		src/commands/TopicCommand.cpp \
 		src/commands/KickCommand.cpp \
 
