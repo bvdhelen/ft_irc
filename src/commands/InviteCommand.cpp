@@ -1,4 +1,4 @@
-#include "InviteCommand.hpp"
+#include "commands/InviteCommand.hpp"
 
 InviteCommand::InviteCommand(const std::vector<std::string> &params)
 {
@@ -18,7 +18,7 @@ void InviteCommand::execute(Server &server, Client &client)
     if (_params.size() != 2)
     {
         server.sendReplyToClient(
-            client.getSocket(),
+            &client,
             ERR_NEEDMOREPARAMS,
             "Not enough parameters");
         return ;
@@ -27,7 +27,7 @@ void InviteCommand::execute(Server &server, Client &client)
     if (target == NULL)
     {
         server.sendReplyToClient(
-            client.getSocket(),
+            &client,
             ERR_NOSUCHNICK,
             "No such nick");
         return ;
@@ -36,7 +36,7 @@ void InviteCommand::execute(Server &server, Client &client)
     if (channel == NULL)
     {
         server.sendReplyToClient(
-            client.getSocket(),
+            &client,
             ERR_NOSUCHCHANNEL,
             "No such channel");
         return ;
@@ -44,7 +44,7 @@ void InviteCommand::execute(Server &server, Client &client)
     if (!client.isInChannel(channel))
     {
         server.sendReplyToClient(
-            client.getSocket(),
+            &client,
             ERR_NOTONCHANNEL,
             "You're not on that channel");
         return ;
@@ -52,7 +52,7 @@ void InviteCommand::execute(Server &server, Client &client)
     if (channel->isInviteOnly() && !channel->isOperator(&client))
     {
         server.sendReplyToClient(
-            client.getSocket(),
+            &client,
             ERR_CHANOPRIVSNEEDED,
             "You're not channel operator");
         return ;
@@ -60,20 +60,21 @@ void InviteCommand::execute(Server &server, Client &client)
     if (target->isInChannel(channel))
     {
         server.sendReplyToClient(
-            client.getSocket(),
+            &client,
             ERR_USERONCHANNEL,
             "User is already on channel");
         return ;
     }
     channel->addInvited(target);
     message = ":" + client.getNickname() + "!"
-        + client.getUsername() + " INVITE "
+        + client.getUsername() + "@"
+        + client.getHost() + " INVITE "
         + target->getNickname() + " "
         + channel->getName() + "\r\n";
-    server.sendToClient(target, message);
-    //TODO: falta ver como esta implementado CommandFactory & sendReplyToClient()
-    server.sendReplyToClient(
-		client.getSocket(),
-		RPL_INVITING,
-		"");
+    server.sendReplyToClientRaw(target, message);
+    message = ":ft_irc 341 " + client.getNickname() + " "
+    + target->getNickname() + " "
+    + channel->getName() + "\r\n";
+
+server.sendReplyToClientRaw(&client, message);
 }

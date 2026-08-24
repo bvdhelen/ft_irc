@@ -81,11 +81,6 @@ bool Channel::isOperator(Client *client) const
 	return _operators.find(client) != _operators.end();
 }
 
-const std::set<Client *> &Channel::getOperators() const
-{
-    return _operators;
-}
-
 // Invite
 void Channel::addInvited(Client *client)
 {
