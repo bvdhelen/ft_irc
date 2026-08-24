@@ -1,6 +1,6 @@
 #include "commands/PingCommand.hpp"
 
-PingCommand::PingCommand(std::vector<std::string> params)
+PingCommand::PingCommand(const std::vector<std::string>& params)
 {
 	_params = params;
 }

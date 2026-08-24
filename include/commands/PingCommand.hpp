@@ -7,7 +7,7 @@
 class PingCommand : public Command
 {
 	public:
-		PingCommand(std::vector<std::string> params);
+		PingCommand(const std::vector<std::string>& params);
 		~PingCommand();
 
 		void execute(Server& server, Client& client);
