@@ -40,8 +40,12 @@ class Server
 		void run();
 		void closeServer();
 
-		void sendReplyToClient(int clientfd, int reply_number, const std::string& message);
-	
+		void sendReplyToClient(Client *client, int reply_number, const std::string& message, const std::string& command_name = "");
+		void sendReplyToClientRaw(Client *client, const std::string& messageRaw);
+
+		void sendToChannelRaw(Channel *channel, const std::string& messageRaw);
+		void sendToChannelExceptRaw(Channel *channel, Client *clientExcept, const std::string& messageRaw);
+
 		//Getters (more can be done)
 		const std::string& getPassword();
 		const std::list<Client*> getAllClients();
@@ -49,6 +53,8 @@ class Server
 		Client *getClientBySocket(int socket);
 		Client *getClientByNick(const std::string &nickToSearch);
 		Channel *getChannelByName(const std::string &name);
+		void removeChannel(const std::string &name);
+		void removeEmptyChannels();
 
 		//Exceptions:
 		class SocketFileDescriptorException : public std::exception
