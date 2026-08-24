@@ -22,7 +22,20 @@ GREY = \033[0;90m
 RESET = \033[0m
 
 # Archivos fuente y archivos objeto
-SRCS = src/main.cpp src/Client.cpp src/Channel.cpp src/Server.cpp src/parser/CommandParser.cpp src/parser/CommandFactory.cpp src/commands/Command.cpp src/commands/NickCommand.cpp src/commands/PassCommand.cpp src/commands/UserCommand.cpp
+SRCS =  src/main.cpp \
+		src/Client.cpp \
+		src/Channel.cpp \
+		src/Server.cpp \
+		src/parser/CommandParser.cpp \
+		src/parser/CommandFactory.cpp \
+		src/commands/Command.cpp \
+		src/commands/PartCommand.cpp \
+		src/commands/QuitCommand.cpp \
+		src/commands/PingCommand.cpp \
+		src/commands/PassCommand.cpp \
+		src/commands/NickCommand.cpp \ 
+		src/commands/UserCommand.cpp
+
 OBJS = $(SRCS:%.cpp=$(OBJ_DIR)/%.o)
 
 all: $(NAME)
