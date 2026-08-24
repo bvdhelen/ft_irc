@@ -83,7 +83,8 @@ void PartCommand::execute(Server &server, Client &client)
         server.sendReplyToClient(
             &client,
             ERR_NEEDMOREPARAMS,
-            "Not enough parameters");
+            "Not enough parameters",
+            "PART");
         return ;
     }
     channels = splitChannels(_params[0]);
