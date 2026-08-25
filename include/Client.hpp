@@ -25,6 +25,7 @@ class Client
         bool _hasUser;
         bool _authenticated;
 		bool _requestedDisconnect;
+		std::string _quitMessage;
 
         // Canales a los que pertenece
         std::set<Channel *> _channels;
@@ -45,6 +46,7 @@ class Client
         bool getHasUser() const;
         bool isAuthenticated() const;
 		bool hasRequestedDisconnection() const;
+		const std::string &getQuitMessage() const;
 
         const std::set<Channel *> &getChannels() const;
 
@@ -60,6 +62,7 @@ class Client
         void setHasUser(bool value);
         void setAuthenticated(bool value);
 		void setRequestedDisconnection(bool value);
+		void setQuitMessage(const std::string &message);
 
         //Buffer
         void appendBuffer(const std::string &data);
