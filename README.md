@@ -58,11 +58,13 @@ The server will then listen for incoming TCP connections on port `6667`.
 
 An IRC client such as `HexChat` can be used to connect to the server.
 
+Once connected, clients can use IRC commands to interact with the server.
+
+The server can also receive a connection from simple telnet TCP.
+
 ```bash
 nc -C 127.0.0.1 6667
 ```
-
-Once connected, clients can use IRC commands to interact with the server.
 
 ---
 
@@ -83,7 +85,6 @@ The server implements the main commands required by the project, including:
 | `INVITE` | Invite a user to a channel |
 | `TOPIC` | View or modify a channel topic |
 | `PING` | Check whether the server is responding |
-| `PONG` | Server response to `PING` |
 | `MODE` | Configure channel modes |
 
 ### Supported Channel Modes
@@ -91,51 +92,10 @@ The server implements the main commands required by the project, including:
 | Mode | Description |
 |:---:|:---|
 | `i` | Invite-only channel |
-| `t` | Topic restricted to operators |
+| `t` | Restrict/Unrestrict changing topic to channel operators  |
 | `k` | Channel password (key) |
 | `o` | Give/take operator privilege |
-| `l` | User limit |
-
----
-
-## Project Structure
-
-```text
-ft_irc/
-├── include/
-│   ├── commands/
-│   │   ├── Command.hpp
-│   │   ├── InviteCommand.hpp
-│   │   ├── JoinCommand.hpp
-│   │   ├── KickCommand.hpp
-│   │   ├── NickCommand.hpp
-│   │   ├── PartCommand.hpp
-│   │   ├── PassCommand.hpp
-│   │   ├── PingCommand.hpp
-│   │   ├── PrivmsgCommand.hpp
-│   │   ├── QuitCommand.hpp
-│   │   ├── TopicCommand.hpp
-│   │   └── UserCommand.hpp
-│   ├── parser/
-│   │   ├── CommandFactory.hpp
-│   │   └── CommandParser.hpp
-│   ├── Channel.hpp
-│   ├── Client.hpp
-│   ├── Replies.hpp
-│   ├── Server.hpp
-│   └── ft_irc.hpp
-│
-├── src/
-│   ├── commands/
-│   ├── parser/
-│   ├── Channel.cpp
-│   ├── Client.cpp
-│   ├── Server.cpp
-│   └── main.cpp
-│
-├── Makefile
-└── README.md
-```
+| `l` | Set/remove user limit |
 
 ---
 
@@ -184,9 +144,3 @@ AI tools were used as a learning aid during the development of the project for:
 All generated explanations and suggestions were reviewed, adapted and implemented manually by the authors.
 
 ---
-
-## Authors
-
-* ralba-ji
-* isastre-
-* eldiaz-c
