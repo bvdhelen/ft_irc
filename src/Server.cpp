@@ -373,11 +373,11 @@ void Server::removeEmptyChannels()
     }
 }
 
-Channel *Server::createChannel(const std::string &name)
+Channel *Server::createChannel(const std::string &name, const std::string &password)
 {
 	try
 	{
-		_channels.insert(std::pair<std::string, Channel>(name, Channel(name)));
+		_channels.insert(std::pair<std::string, Channel>(name, Channel(name, password)));
 	}
 	catch(const std::exception& e)
 	{
