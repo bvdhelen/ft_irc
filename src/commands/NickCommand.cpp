@@ -6,57 +6,7 @@ NickCommand::NickCommand(const std::vector<std::string>& params)
 }
 
 NickCommand::~NickCommand()
-{ }
-
-void NickCommand::notifyClients(Server& server, Client& client, std::string oldNickname, std::string newNickname)
 {
-	std::set<Client *> notified;
-	const std::set<Channel *> &channels = client.getChannels();
-	const std::string message = ":" + oldNickname + " NICK :" + newNickname + "\r\n";
-
-	notified.insert(&client);
-	for (std::set<Channel *>::const_iterator it = channels.begin(); it != channels.end(); it++)
-	{
-		const std::set<Client *> &members = (*it)->getClients();
-		for (std::set<Client *>::const_iterator mit = members.begin(); mit != members.end(); mit++)
-			notified.insert(*mit);
-	}
-
-	for (std::set<Client *>::const_iterator nit = notified.begin(); nit != notified.end(); nit++)
-		server.sendReplyToClientRaw(*nit, message);
-}
-
-//   nickname = ( letter / special ) *8( letter / digit / special / "-" )
-//   special  = "[", "]", "\", "`", "_", "^", "{", "|", "}"
-bool NickCommand::isValidNickname(const std::string &nickname)
-{
-	if (nickname.empty())
-		return false;
-
-	for (size_t i = 0; i < nickname.length(); i++)
-	{
-		char c = nickname[i];
-		bool isSpecial = (c == '[' || c == ']' || c == '\\' || c == '`'
-				|| c == '_' || c == '^' || c == '{' || c == '|' || c == '}');
-
-		if (i == 0 && !std::isalpha(c) && !isSpecial)
-			return false;
-		else if (!std::isalnum(c) && !isSpecial && c != '-')
-			return false;
-	}
-	return true;
-}
-
-bool NickCommand::isNicknameInUse(Server &server, const std::string nickname)
-{
-	std::list<Client *> clients = server.getAllClients();
-	std::list<Client *>::iterator it = clients.begin();
-	for (; it != clients.end(); it++)
-	{
-		if ((*it)->getNickname().compare(nickname) == 0)
-			return true;
-	}
-	return false;
 }
 
 void NickCommand::execute(Server &server, Client &client)
@@ -98,4 +48,55 @@ void NickCommand::execute(Server &server, Client &client)
 			}
 		}
 	}
+}
+
+//   nickname = ( letter / special ) *8( letter / digit / special / "-" )
+//   special  = "[", "]", "\", "`", "_", "^", "{", "|", "}"
+bool NickCommand::isValidNickname(const std::string &nickname)
+{
+	if (nickname.empty())
+		return false;
+
+	for (size_t i = 0; i < nickname.length(); i++)
+	{
+		char c = nickname[i];
+		bool isSpecial = (c == '[' || c == ']' || c == '\\' || c == '`'
+				|| c == '_' || c == '^' || c == '{' || c == '|' || c == '}');
+
+		if (i == 0 && !std::isalpha(c) && !isSpecial)
+			return false;
+		else if (!std::isalnum(c) && !isSpecial && c != '-')
+			return false;
+	}
+	return true;
+}
+
+bool NickCommand::isNicknameInUse(Server &server, const std::string nickname)
+{
+	std::list<Client *> clients = server.getAllClients();
+	std::list<Client *>::iterator it = clients.begin();
+	for (; it != clients.end(); it++)
+	{
+		if ((*it)->getNickname().compare(nickname) == 0)
+			return true;
+	}
+	return false;
+}
+
+void NickCommand::notifyClients(Server& server, Client& client, std::string oldNickname, std::string newNickname)
+{
+	std::set<Client *> notified;
+	const std::set<Channel *> &channels = client.getChannels();
+	const std::string message = ":" + oldNickname + " NICK :" + newNickname + "\r\n";
+
+	notified.insert(&client);
+	for (std::set<Channel *>::const_iterator it = channels.begin(); it != channels.end(); it++)
+	{
+		const std::set<Client *> &members = (*it)->getClients();
+		for (std::set<Client *>::const_iterator mit = members.begin(); mit != members.end(); mit++)
+			notified.insert(*mit);
+	}
+
+	for (std::set<Client *>::const_iterator nit = notified.begin(); nit != notified.end(); nit++)
+		server.sendReplyToClientRaw(*nit, message);
 }

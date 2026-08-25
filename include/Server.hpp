@@ -1,9 +1,9 @@
 #ifndef SERVER_HPP
-#define SERVER_HPP
+# define SERVER_HPP
 
-#include "ft_irc.hpp"
-#include "Client.hpp"
-#include "Channel.hpp"
+# include "ft_irc.hpp"
+# include "Client.hpp"
+# include "Channel.hpp"
 
 class Server
 {
@@ -14,13 +14,10 @@ class Server
 		std::string _password;
 		static volatile sig_atomic_t _isRunning;
 
-		//Conocer los clientes
 		std::map<int, Client> _clients;
 
-		//Conocer los canales
 		std::map<std::string, Channel> _channels;
 
-		//Vector de pollfds
 		std::vector<struct pollfd> _pollfds;
 
 		static void termination_handler(const int signal);
@@ -31,6 +28,7 @@ class Server
 		void disconnectClient(size_t& pollIndex);
 		void receiveFromClient(size_t& pollIndex);
 		void processData(std::string data, size_t& pollIndex);
+
 	public:
 
 		Server(int port, const std::string &password);
@@ -46,7 +44,7 @@ class Server
 		void sendToChannelRaw(Channel *channel, const std::string& messageRaw);
 		void sendToChannelExceptRaw(Channel *channel, Client *clientExcept, const std::string& messageRaw);
 
-		//Getters (more can be done)
+		// Getters
 		const std::string& getPassword();
 		const std::list<Client*> getAllClients();
 		const std::list<Channel*> getAllChannels();
@@ -57,7 +55,7 @@ class Server
 		void removeEmptyChannels();
 		Channel *createChannel(const std::string &name, const std::string& password = "");
 
-		//Exceptions:
+		// Exceptions
 		class SocketFileDescriptorException : public std::exception
 		{
 			const char* what() const throw();

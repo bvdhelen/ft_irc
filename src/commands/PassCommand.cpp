@@ -6,7 +6,8 @@ PassCommand::PassCommand(const std::vector<std::string>& params)
 }
 
 PassCommand::~PassCommand()
-{ }
+{
+}
 
 void PassCommand::execute(Server &server, Client &client)
 {

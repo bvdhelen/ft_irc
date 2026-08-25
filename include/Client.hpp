@@ -1,14 +1,12 @@
 #ifndef CLIENT_HPP
-#define CLIENT_HPP
+# define CLIENT_HPP
 
-#include "ft_irc.hpp"
-
-#include "Channel.hpp"
+# include "ft_irc.hpp"
+# include "Channel.hpp"
 
 class Client
 {
     private:
-        // Identificador del cliente
         int _socket;
 
         std::string _nickname;
@@ -16,10 +14,8 @@ class Client
         std::string _realname;
         std::string _host;
 
-        // Buffer donde se almacenan los datos recibidos
         std::string _buffer;
 
-        // Estado del registro
         bool _passOk;
         bool _hasNick;
         bool _hasUser;
@@ -27,14 +23,13 @@ class Client
 		bool _requestedDisconnect;
 		std::string _quitMessage;
 
-        // Canales a los que pertenece
         std::set<Channel *> _channels;
 
     public:
         Client(int socket);
         ~Client();
 
-        //Getters
+        // Getters
         int getSocket() const;
         const std::string &getNickname() const;
         const std::string &getUsername() const;
@@ -50,7 +45,7 @@ class Client
 
         const std::set<Channel *> &getChannels() const;
 
-        //Setters
+        // Setters
         void setSocket(int socket);
         void setNickname(const std::string &nickname);
         void setUsername(const std::string &username);
@@ -64,7 +59,7 @@ class Client
 		void setRequestedDisconnection(bool value);
 		void setQuitMessage(const std::string &message);
 
-        //Buffer
+        // Buffer
         void appendBuffer(const std::string &data);
         void clearBuffer();
         bool hasCommandBuffer() const;

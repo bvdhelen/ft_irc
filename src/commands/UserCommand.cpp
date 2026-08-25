@@ -6,7 +6,8 @@ UserCommand::UserCommand(const std::vector<std::string>& params)
 }
 
 UserCommand::~UserCommand()
-{ }
+{
+}
 
 void UserCommand::execute(Server &server, Client &client)
 {

@@ -1,7 +1,7 @@
 #ifndef CHANNEL_HPP
-#define CHANNEL_HPP
+# define CHANNEL_HPP
 
-#include "ft_irc.hpp"
+# include "ft_irc.hpp"
 
 class Client;
 
@@ -24,32 +24,32 @@ class Channel
 		Channel(const std::string &name, const std::string &password = "");
 		~Channel();
 
-		// getters
+		// Getters
 		const std::string &getName() const;
 		const std::string &getTopic() const;
 		const std::set<Client *> &getClients() const;
 		const std::set<Client *> &getOperators() const;
 
-		// clients
+		// Clients
 		void addClient(Client *client);
-		void removeClient(Client *client); //que no quede nadie dentro
+		void removeClient(Client *client);
 		bool hasClient(Client *client) const;
 		bool isEmpty() const;
 
-		// operators
+		// Operators
 		void addOperator(Client *client);
 		void removeOperator(Client *client);
 		bool isOperator(Client *client) const;
 
-		// invited clients
+		// Invited clients
 		void addInvited(Client *client);
 		void removeInvited(Client *client);
 		bool isInvited(Client *client) const;
 
-		// topic
+		// Topic
 		void setTopic(const std::string &topic);
 
-		// modes
+		// Modes
 		// mode - invite only
 		void setInviteOnly(bool value);
 		bool isInviteOnly() const;
@@ -66,11 +66,11 @@ class Channel
 
 		// mode - user limit
 		void setUserLimit(size_t limit);
-		void removeUserLimit(); //remove es set a 0
+		void removeUserLimit();
 		bool hasUserLimit() const;
 		bool isFull() const;
 
-        // exception
+        // Exception
 		class NameTooLongException : public std::exception
 		{
 			public:

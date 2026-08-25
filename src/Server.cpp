@@ -5,7 +5,6 @@ static std::string toUpper(const std::string &s);
 
 volatile sig_atomic_t Server::_isRunning = false;
 
-//Lo siento Izhan, los signal handlers van siempre arriba.
 void Server::termination_handler(const int signal)
 {
 	Server::_isRunning = false;
@@ -118,6 +117,7 @@ void Server::run()
 	std::cout << "Shutting down cleanly..." << std::endl;
 	closeServer();
 }
+
 void Server::acceptClient(int serverfd)
 {
 	struct sockaddr_in clientSck;
@@ -383,7 +383,6 @@ Channel *Server::createChannel(const std::string &name, const std::string &passw
 	{
 		return NULL;
 	}
-	
 	return getChannelByName(name);
 }
 
@@ -400,7 +399,7 @@ void Server::closeServer()
 	close(_socket);
 }
 
-//Exceptions:
+// Exceptions
 const char* Server::SocketFileDescriptorException::what() const throw()
 {
 	return "Couldn't create a file descriptor for the socket. (socket() failed)";
