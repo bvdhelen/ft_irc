@@ -13,7 +13,7 @@ class Server
 		int _port;
 		std::string _password;
 		static volatile sig_atomic_t _isRunning;
-	
+
 		//Conocer los clientes
 		std::map<int, Client> _clients;
 
@@ -53,6 +53,8 @@ class Server
 		Client *getClientBySocket(int socket);
 		Client *getClientByNick(const std::string &nickToSearch);
 		Channel *getChannelByName(const std::string &name);
+		void removeChannel(const std::string &name);
+		void removeEmptyChannels();
 
 		//Exceptions:
 		class SocketFileDescriptorException : public std::exception

@@ -14,7 +14,8 @@ class Channel
 		size_t _userLimit; // 0 means no limit
 
 		std::set<Client *> _clients;
-		std::set<Client *> _operators; // admins
+		std::set<Client *> _operators;
+		std::set<Client *> _invited;
 
 		bool _inviteOnly;
 		bool _protectedTopic;
@@ -23,22 +24,30 @@ class Channel
 		Channel(const std::string &name, const std::string &password = "");
 		~Channel();
 
+		// getters
+		const std::string &getName() const;
+		const std::string &getTopic() const;
+		const std::set<Client *> &getClients() const;
+		const std::set<Client *> &getOperators() const;
+
 		// clients
 		void addClient(Client *client);
 		void removeClient(Client *client); //que no quede nadie dentro
 		bool hasClient(Client *client) const;
 		bool isEmpty() const;
-		const std::set<Client *> &getClients() const;
 
 		// operators
 		void addOperator(Client *client);
 		void removeOperator(Client *client);
 		bool isOperator(Client *client) const;
-		const std::set<Client *> &getOperators() const;
+
+		// invited clients
+		void addInvited(Client *client);
+		void removeInvited(Client *client);
+		bool isInvited(Client *client) const;
 
 		// topic
 		void setTopic(const std::string &topic);
-		const std::string &getTopic() const;
 
 		// modes
 		// mode - invite only

@@ -1,7 +1,6 @@
 #include "Server.hpp"
 #include "parser/CommandParser.hpp"
 
-
 volatile sig_atomic_t Server::_isRunning = false;
 
 //Lo siento Izhan, los signal handlers van siempre arriba.
@@ -185,7 +184,10 @@ void Server::disconnectClient(size_t& pollIndex)
 {
 	int clientfd = _pollfds[pollIndex].fd;
 	Client* client = getClientBySocket(clientfd);
+	if (client == NULL)
+        return;
 	client->disconnect();
+    removeEmptyChannels();
 	close(clientfd);
 	std::cout << "A client disconected." << std::endl;
 	//Erase from Server data structures.
@@ -203,7 +205,6 @@ void Server::processData(std::string data, size_t& pollIndex)
 		std::string command = client->getCommandFromBuffer();
 		CommandParser::parseAndExecute(command, *this, *client);
 
-
 		//Después de ejecutar cada comando, revisar si el cliente debe desconectarse.
 		if (client->hasRequestedDisconnection())
 		{
@@ -212,7 +213,6 @@ void Server::processData(std::string data, size_t& pollIndex)
 		}
 	}	
 }
-
 
 void Server::sendReplyToClient(Client *client, int reply_number, const std::string& message, const std::string& command_name)
 {
@@ -331,6 +331,31 @@ Channel *Server::getChannelByName(const std::string &name)
     if (it != _channels.end())
         return &(it->second);
     return NULL;
+}
+
+void Server::removeChannel(const std::string &name)
+{
+    _channels.erase(name);
+}
+
+void Server::removeEmptyChannels()
+{
+    std::map<std::string, Channel>::iterator it;
+	std::map<std::string, Channel>::iterator next;
+
+    it = _channels.begin();
+    while (it != _channels.end())
+    {
+        if (it->second.isEmpty())
+		{
+			next = it;
+			++next;
+            _channels.erase(it);
+			it = next;
+		}
+        else
+            ++it;
+    }
 }
 
 //TODO: Envíar mensaje a cliente con algo parecido a "Connection closed by server"
