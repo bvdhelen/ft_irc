@@ -1,6 +1,8 @@
 #include "Server.hpp"
 #include "parser/CommandParser.hpp"
 
+static std::string toUpper(const std::string &s);
+
 volatile sig_atomic_t Server::_isRunning = false;
 
 //Lo siento Izhan, los signal handlers van siempre arriba.
@@ -337,9 +339,12 @@ Client *Server::getClientByNick(const std::string &nickToSearch)
 
 Channel *Server::getChannelByName(const std::string &name)
 {
-    std::map<std::string, Channel>::iterator it = _channels.find(name);
-    if (it != _channels.end())
-        return &(it->second);
+    std::map<std::string, Channel>::iterator it = _channels.begin();
+	for (; it != _channels.end(); it++)
+	{
+		if (toUpper(it->first).compare(toUpper(name)) == 0)
+	        return &(it->second);
+	}
     return NULL;
 }
 
@@ -368,11 +373,11 @@ void Server::removeEmptyChannels()
     }
 }
 
-Channel *Server::createChannel(const std::string &name)
+Channel *Server::createChannel(const std::string &name, const std::string &password)
 {
 	try
 	{
-		_channels.insert(std::pair<std::string, Channel>(name, Channel(name)));
+		_channels.insert(std::pair<std::string, Channel>(name, Channel(name, password)));
 	}
 	catch(const std::exception& e)
 	{
@@ -419,4 +424,12 @@ const char* Server::ListenConnectionsException::what() const throw()
 const char* Server::PollingFailedException::what() const throw()
 {
 	return "Polling of sockets failed. (poll() failed)";
+}
+
+static std::string toUpper(const std::string &s)
+{
+	std::string upper;
+	for (size_t i = 0; i < s.length(); i++)
+        upper += toupper(s[i]);
+	return upper;
 }

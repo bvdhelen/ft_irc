@@ -13,6 +13,7 @@ void JoinCommand::execute(Server &server, Client &client)
 {
     std::string channelName;
     std::vector<std::string> channels;
+    std::vector<std::string> passwd;
     Channel *channel;
 
     if (_params.empty())
@@ -24,16 +25,29 @@ void JoinCommand::execute(Server &server, Client &client)
             "JOIN");
         return ;
     }
-    channels = splitChannels(_params[0]);
-    for (std::vector<std::string>::iterator it = channels.begin(); it != channels.end(); it++)
+    channels = splitStrings(_params[0]);
+    if (_params.size() >= 2)
+        passwd = splitStrings(_params[1]);
+    for (size_t i = 0; i < channels.size(); i++)
     {
-        channelName = *it;
+        channelName = channels[i];
+        if (channelName[0] != '#')
+        {
+            server.sendReplyToClient(&client, ERR_NOSUCHCHANNEL, "No such channel", channelName);
+            continue;
+        }
         channel = server.getChannelByName(channelName);
-        handleJoinChannel(server, client, channel, channelName);
+        //Ask for real channelName to match specific capital letters.
+        if (channel != NULL)
+            channelName = channel->getName();
+        std::string password = "";
+        if (i < passwd.size())
+            password = passwd[i];
+        handleJoinChannel(server, client, channel, channelName, password);
     }
 }
 
-std::vector<std::string> JoinCommand::splitChannels(const std::string &channels)
+std::vector<std::string> JoinCommand::splitStrings(const std::string &channels)
 {
     std::string::size_type start;
     std::string::size_type comma;
@@ -61,11 +75,11 @@ std::vector<std::string> JoinCommand::splitChannels(const std::string &channels)
     return result;
 }
 
-void JoinCommand::handleJoinChannel(Server &server, Client &client, Channel *channel, const std::string& channelName)
+void JoinCommand::handleJoinChannel(Server &server, Client &client, Channel *channel, const std::string& channelName, const std::string &password)
 {
     if (channel == NULL)
     {
-        channel = server.createChannel(channelName);
+        channel = server.createChannel(channelName, password);
         if (channel == NULL)
             return ;
         client.addChannel(channel);
