@@ -1,14 +1,8 @@
 #ifndef TOPIC_COMMAND_HPP
 # define TOPIC_COMMAND_HPP
 
-# include "Replies.hpp"
 # include "Command.hpp"
-# include "Channel.hpp"
 
-/**
- * Command: TOPIC
- * Parameters: <channel> [ <topic> ]
- */
 class TopicCommand : public Command
 {
 	private:

@@ -1,9 +1,8 @@
 #ifndef COMMANDFACTORY_HPP
-#define COMMANDFACTORY_HPP
+# define COMMANDFACTORY_HPP
 
-#include "ft_irc.hpp"
-
-#include "commands/Command.hpp"
+# include "ft_irc.hpp"
+# include "commands/Command.hpp"
 
 class CommandFactory
 {

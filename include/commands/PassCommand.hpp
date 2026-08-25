@@ -1,8 +1,7 @@
 #ifndef PASSCOMMAND_HPP
-#define PASSCOMMAND_HPP
+# define PASSCOMMAND_HPP
 
-#include "commands/Command.hpp"
-#include "Replies.hpp"
+# include "Command.hpp"
 
 class PassCommand : public Command
 {

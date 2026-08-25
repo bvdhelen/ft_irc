@@ -1,8 +1,7 @@
 #ifndef NICKCOMMAND_HPP
-#define NICKCOMMAND_HPP
+# define NICKCOMMAND_HPP
 
-#include "commands/Command.hpp"
-#include "Replies.hpp"
+# include "Command.hpp"
 
 class NickCommand : public Command
 {

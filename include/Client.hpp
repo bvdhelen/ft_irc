@@ -1,9 +1,8 @@
 #ifndef CLIENT_HPP
-#define CLIENT_HPP
+# define CLIENT_HPP
 
-#include "ft_irc.hpp"
-
-#include "Channel.hpp"
+# include "ft_irc.hpp"
+# include "Channel.hpp"
 
 class Client
 {

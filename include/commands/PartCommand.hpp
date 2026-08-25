@@ -1,9 +1,7 @@
 #ifndef PARTCOMMAND_HPP
 # define PARTCOMMAND_HPP
 
-# include "Replies.hpp"
 # include "Command.hpp"
-# include "Channel.hpp"
 
 class PartCommand : public Command
 {

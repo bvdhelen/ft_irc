@@ -1,8 +1,7 @@
 #ifndef PINGCOMMAND_HPP
 # define PINGCOMMAND_HPP
 
-#include "commands/Command.hpp"
-#include "Replies.hpp"
+# include "Command.hpp"
 
 class PingCommand : public Command
 {

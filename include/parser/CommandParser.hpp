@@ -1,9 +1,9 @@
 #ifndef COMMANDPARSER_HPP
-#define COMMANDPARSER_HPP
+# define COMMANDPARSER_HPP
 
-#include "ft_irc.hpp"
-#include "Server.hpp"
-#include "Client.hpp"
+# include "ft_irc.hpp"
+# include "Server.hpp"
+# include "Client.hpp"
 
 class CommandParser
 {

@@ -2,8 +2,10 @@
 # define COMMAND_HPP
 
 # include "ft_irc.hpp"
+# include "Replies.hpp"
 # include "Server.hpp"
 # include "Client.hpp"
+# include "Channel.hpp"
 
 class Command
 {

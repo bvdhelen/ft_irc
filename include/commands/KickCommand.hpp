@@ -1,14 +1,8 @@
 #ifndef KICK_COMMAND_HPP
 # define KICK_COMMAND_HPP
 
-# include "Replies.hpp"
 # include "Command.hpp"
-# include "Channel.hpp"
 
-/**
- * Command: KICK
- * Parameters: <channel> <user> [<comment>]
- */
 class KickCommand : public Command
 {
     private:

@@ -1,8 +1,7 @@
 #ifndef USERCOMMAND_HPP
-#define USERCOMMAND_HPP
+# define USERCOMMAND_HPP
 
-#include "commands/Command.hpp"
-#include "Replies.hpp"
+# include "Command.hpp"
 
 class UserCommand : public Command
 {
