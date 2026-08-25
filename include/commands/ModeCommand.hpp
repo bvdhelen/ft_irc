@@ -5,6 +5,8 @@
 
 class ModeCommand : public Command
 {
+	private:
+		void applyModes(Channel *channel, Client &client, Server &server, const std::string &modestring);
 	public:
 		ModeCommand(const std::vector<std::string> &params);
 		~ModeCommand();
