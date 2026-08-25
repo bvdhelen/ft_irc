@@ -12,6 +12,7 @@ JoinCommand::~JoinCommand()
 void JoinCommand::execute(Server &server, Client &client)
 {
     std::string channelName;
+    std::vector<std::string> channels;
     Channel *channel;
 
     if (_params.empty())
@@ -23,8 +24,45 @@ void JoinCommand::execute(Server &server, Client &client)
             "JOIN");
         return ;
     }
-    channelName = _params[0];
-    channel = server.getChannelByName(channelName);
+    channels = splitChannels(_params[0]);
+    for (std::vector<std::string>::iterator it = channels.begin(); it != channels.end(); it++)
+    {
+        channelName = *it;
+        channel = server.getChannelByName(channelName);
+        handleJoinChannel(server, client, channel, channelName);
+    }
+}
+
+std::vector<std::string> JoinCommand::splitChannels(const std::string &channels)
+{
+    std::string::size_type start;
+    std::string::size_type comma;
+    std::string channel;
+    std::vector<std::string> result;
+
+    if (channels.empty() || channels[0] == ',' || channels[channels.size() - 1] == ',')
+        return result;
+    start = 0;
+    while (start < channels.size())
+    {
+        comma = channels.find(',', start);
+        if (comma == start)
+            return std::vector<std::string>();
+        if (comma == std::string::npos)
+        {
+            channel = channels.substr(start);
+            result.push_back(channel);
+            break ;
+        }
+        channel = channels.substr(start, comma - start);
+        result.push_back(channel);
+        start = comma + 1;
+    }
+    return result;
+}
+
+void JoinCommand::handleJoinChannel(Server &server, Client &client, Channel *channel, std::string channelName)
+{
     if (channel == NULL)
     {
         channel = server.createChannel(channelName);
@@ -70,16 +108,16 @@ void JoinCommand::execute(Server &server, Client &client)
     
     // Send JOIN
     std::string joinMsg = ":" + client.getNickname() + "!" + client.getUsername() +
-                          "@" + client.getHost() + " JOIN " + channelName + "\r\n";
+                        "@" + client.getHost() + " JOIN " + channelName + "\r\n";
     server.sendToChannelRaw(channel, joinMsg);
 
     // Send TOPIC
     if (!channel->getTopic().empty())
         server.sendReplyToClient(&client, RPL_TOPIC,
-                                 channelName + " :" + channel->getTopic());
+                                channelName + " :" + channel->getTopic());
     else
         server.sendReplyToClient(&client, RPL_NOTOPIC,
-                                 channelName + " :No topic is set");
+                                channelName + " :No topic is set");
 
     // Send NAMES
     std::string namesList;
