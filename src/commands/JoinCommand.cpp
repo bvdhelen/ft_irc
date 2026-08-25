@@ -1,4 +1,4 @@
-#include "JoinCommand.hpp"
+#include "commands/JoinCommand.hpp"
 
 JoinCommand::JoinCommand(const std::vector<std::string> &params)
 {
@@ -17,9 +17,10 @@ void JoinCommand::execute(Server &server, Client &client)
     if (_params.empty())
     {
         server.sendReplyToClient(
-            client.getSocket(),
+            &client,
             ERR_NEEDMOREPARAMS,
-            "Not enough parameters");
+            "Not enough parameters",
+            "JOIN");
         return ;
     }
     channelName = _params[0];
@@ -34,28 +35,30 @@ void JoinCommand::execute(Server &server, Client &client)
         return ;
     if (channel->isInviteOnly())
     {
-        if (!channel->isInvited(client))
+        if (!channel->isInvited(&client))
         {
             server.sendReplyToClient(
-                client,
+                &client,
                 ERR_INVITEONLYCHAN,
                 channelName + " :Cannot join channel (+i)");
             return ;
         }
-        channel->removeInvited(client);
+        channel->removeInvited(&client);
     }
     if (channel->hasPassword())
     {
         if (_params.size() < 2)
         {
-            server.sendReplyToClient(client,
+            server.sendReplyToClient(
+                &client,
                 ERR_BADCHANNELKEY,
                 channelName + " :Cannot join channel (+k)");
             return ;
         }
         if (!channel->checkPassword(_params[1]))
         {
-            server.sendReplyToClient(client,
+            server.sendReplyToClient(
+                &client,
                 ERR_BADCHANNELKEY,
                 channelName + " :Cannot join channel (+k)");
             return ;
@@ -63,7 +66,8 @@ void JoinCommand::execute(Server &server, Client &client)
     }
     if (channel->isFull())
     {
-        server.sendReplyToClient(client,
+        server.sendReplyToClient(
+            &client,
             ERR_CHANNELISFULL,
             channelName + " :Cannot join channel (+l)");
         return ;
@@ -72,14 +76,14 @@ void JoinCommand::execute(Server &server, Client &client)
     
     // Enviar JOIN, TOPIC, NAMES (igual que en la creación)
     std::string joinMsg = ":" + client.getNickname() + "!" + client.getUsername() +
-                          "@" + client.getHostname() + " JOIN " + channelName;
-    server.sendToChannel(channel, joinMsg);
+                          "@" + client.getHost() + " JOIN " + channelName;
+    server.sendToChannelRaw(channel, joinMsg);
 
     if (!channel->getTopic().empty())
-        server.sendReplyToClient(client, RPL_TOPIC,
+        server.sendReplyToClient(&client, RPL_TOPIC,
                                  channelName + " :" + channel->getTopic());
     else
-        server.sendReplyToClient(client, RPL_NOTOPIC,
+        server.sendReplyToClient(&client, RPL_NOTOPIC,
                                  channelName + " :No topic is set");
 
     // Enviar NAMES (igual que en createAndJoinNewChannel)
@@ -93,6 +97,6 @@ void JoinCommand::execute(Server &server, Client &client)
             namesList += "@";
         namesList += (*it)->getNickname();
     }
-    server.sendReplyToClient(client, RPL_NAMREPLY, "= " + channelName + " :" + namesList);
-    server.sendReplyToClient(client, RPL_ENDOFNAMES, channelName + " :End of NAMES list");
+    server.sendReplyToClient(&client, RPL_NAMREPLY, "= " + channelName + " :" + namesList);
+    server.sendReplyToClient(&client, RPL_ENDOFNAMES, channelName + " :End of NAMES list");
 }
