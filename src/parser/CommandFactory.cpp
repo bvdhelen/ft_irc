@@ -5,6 +5,7 @@
 #include "commands/KickCommand.hpp"
 #include "commands/TopicCommand.hpp"
 #include "commands/InviteCommand.hpp"
+#include "commands/PrivmsgCommand.hpp"
 
 static void toUpper(std::string &s);
 
