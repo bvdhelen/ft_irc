@@ -50,6 +50,7 @@ void Channel::removeClient(Client *client)
 {
 	_clients.erase(client);
 	_operators.erase(client);
+	_invited.erase(client);
 }
 
 bool Channel::hasClient(Client *client) const
@@ -78,6 +79,22 @@ void Channel::removeOperator(Client *client)
 bool Channel::isOperator(Client *client) const
 {
 	return _operators.find(client) != _operators.end();
+}
+
+// Invite
+void Channel::addInvited(Client *client)
+{
+    _invited.insert(client);
+}
+
+void Channel::removeInvited(Client *client)
+{
+    _invited.erase(client);
+}
+
+bool Channel::isInvited(Client *client) const
+{
+    return _invited.find(client) != _invited.end();
 }
 
 // Topic

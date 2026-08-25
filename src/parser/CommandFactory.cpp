@@ -2,8 +2,9 @@
 #include "commands/PingCommand.hpp"
 #include "commands/PartCommand.hpp"
 #include "commands/QuitCommand.hpp"
-# include "commands/KickCommand.hpp"
-# include "commands/TopicCommand.hpp"
+#include "commands/KickCommand.hpp"
+#include "commands/TopicCommand.hpp"
+#include "commands/InviteCommand.hpp"
 
 static void toUpper(std::string &s);
 
@@ -21,9 +22,9 @@ Command *CommandFactory::createCommand(std::string commandName, const std::vecto
 	if (commandName == "QUIT")			return new QuitCommand(params);
 	if (commandName == "KICK")			return new KickCommand(params);
 	if (commandName == "TOPIC")			return new TopicCommand(params);
-	// if (commandName == "INVITE")		return new InviteCommand(params);
+	if (commandName == "INVITE")		return new InviteCommand(params);
 	// if (commandName == "MODE")		return new ModeCommand(params);
-	if (commandName == "PING")		return new PingCommand(params);
+	if (commandName == "PING")			return new PingCommand(params);
 	
 	return NULL; // default if no command is found
 }
