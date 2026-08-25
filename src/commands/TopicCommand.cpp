@@ -76,10 +76,10 @@ void TopicCommand::setTopic(Server &server, Client &client, Channel *channel, co
 	if (channel->isProtectedTopic()
 		&& !channel->isOperator(&client))
 	{
-		message = ":ft_irc 331 "
+		message = ":ft_irc 482 "
 			+ client.getNickname() + " "
 			+ channel->getName()
-			+ "You're not a channel operator\r\n";
+			+ " :You're not a channel operator\r\n";
 		server.sendReplyToClientRaw(&client, message);
 		return ;
 	}
