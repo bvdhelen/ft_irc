@@ -51,7 +51,6 @@
 
 // PASS / OPER
 # define ERR_PASSWDMISMATCH     464 // Password does not match
-# define ERR_NOOPERHOST         491 // Host cannot use OPER
 
 // CHANNEL MODE / JOIN
 # define ERR_UNKNOWNMODE        472 // Unknown channel mode
