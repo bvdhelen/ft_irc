@@ -13,7 +13,8 @@ Client::Client(int socket)
       _hasNick(false),
       _hasUser(false),
       _authenticated(false),
-	  _requestedDisconnect(false)
+	  _requestedDisconnect(false),
+	  _quitMessage("")
 {
 }
 
@@ -78,6 +79,11 @@ bool Client::hasRequestedDisconnection() const
 	return _requestedDisconnect;
 }
 
+const std::string &Client::getQuitMessage() const
+{
+	return _quitMessage;
+}
+
 const std::set<Channel *> &Client::getChannels() const
 {
     return _channels;
@@ -132,6 +138,11 @@ void Client::setAuthenticated(bool value)
 void Client::setRequestedDisconnection(bool value)
 {
 	_requestedDisconnect = value;
+}
+
+void Client::setQuitMessage(const std::string &message)
+{
+	_quitMessage = message;
 }
 
 // Buffer

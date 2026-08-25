@@ -39,6 +39,7 @@ SRCS =  src/main.cpp \
 		src/commands/KickCommand.cpp \
 		src/commands/InviteCommand.cpp \
 		src/commands/PrivmsgCommand.cpp \
+		src/commands/JoinCommand.cpp \
 
 OBJS = $(SRCS:%.cpp=$(OBJ_DIR)/%.o)
 
