@@ -28,7 +28,15 @@ void JoinCommand::execute(Server &server, Client &client)
     for (std::vector<std::string>::iterator it = channels.begin(); it != channels.end(); it++)
     {
         channelName = *it;
+        if (channelName[0] != '#')
+        {
+            server.sendReplyToClient(&client, ERR_NOSUCHCHANNEL, "No such channel", channelName);
+            continue;
+        }
         channel = server.getChannelByName(channelName);
+        //Ask for real channelName to match specific capital letters.
+        if (channel != NULL)
+            channelName = channel->getName();
         handleJoinChannel(server, client, channel, channelName);
     }
 }
