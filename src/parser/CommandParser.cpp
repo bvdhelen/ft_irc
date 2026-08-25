@@ -11,9 +11,11 @@ void CommandParser::parseAndExecute(std::string line, Server &server, Client &cl
 	parseParams(line, params);
 
 	Command *cmd = CommandFactory::createCommand(commandName, params, client);
-	if (!cmd)
+	if (!cmd && client.isAuthenticated())
 		return server.sendReplyToClient(&client, ERR_UNKNOWNCOMMAND, "Unknown command", commandName);
-	
+	else if (!cmd)
+		return;
+
 	cmd->execute(server, client);
 
 	delete cmd;

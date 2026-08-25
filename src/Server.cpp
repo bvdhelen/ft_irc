@@ -114,7 +114,7 @@ void Server::run()
 			}
 		}
 	}
-	std::cout << "Shutting down cleanly..." << std::endl;
+	std::cout << std::endl << "Shutting down cleanly..." << std::endl;
 	closeServer();
 }
 
