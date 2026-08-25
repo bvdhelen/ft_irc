@@ -49,24 +49,13 @@ void JoinCommand::execute(Server &server, Client &client)
             }
             channel->removeInvited(&client);
         }
-        if (channel->hasPassword())
+        if (channel->hasPassword() && (_params.size() < 2 || !channel->checkPassword(_params[1])))
         {
-            if (_params.size() < 2)
-            {
-                server.sendReplyToClient(
-                    &client,
-                    ERR_BADCHANNELKEY,
-                    channelName + " :Cannot join channel (+k)");
-                return ;
-            }
-            if (!channel->checkPassword(_params[1]))
-            {
-                server.sendReplyToClient(
-                    &client,
-                    ERR_BADCHANNELKEY,
-                    channelName + " :Cannot join channel (+k)");
-                return ;
-            }
+            server.sendReplyToClient(
+                &client,
+                ERR_BADCHANNELKEY,
+                channelName + " :Cannot join channel (+k)");
+            return ;
         }
         if (channel->isFull())
         {
@@ -79,11 +68,12 @@ void JoinCommand::execute(Server &server, Client &client)
         client.addChannel(channel);
     }
     
-    // Enviar JOIN, TOPIC, NAMES (igual que en la creación)
+    // Send JOIN
     std::string joinMsg = ":" + client.getNickname() + "!" + client.getUsername() +
                           "@" + client.getHost() + " JOIN " + channelName + "\r\n";
     server.sendToChannelRaw(channel, joinMsg);
 
+    // Send TOPIC
     if (!channel->getTopic().empty())
         server.sendReplyToClient(&client, RPL_TOPIC,
                                  channelName + " :" + channel->getTopic());
@@ -91,7 +81,7 @@ void JoinCommand::execute(Server &server, Client &client)
         server.sendReplyToClient(&client, RPL_NOTOPIC,
                                  channelName + " :No topic is set");
 
-    // Enviar NAMES (igual que en createAndJoinNewChannel)
+    // Send NAMES
     std::string namesList;
     const std::set<Client*>& clients = channel->getClients();
     for (std::set<Client*>::const_iterator it = clients.begin(); it != clients.end(); ++it)

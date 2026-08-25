@@ -177,9 +177,6 @@ void Server::receiveFromClient(size_t& pollIndex)
 	}
 }
 
-//Esta función desconecta a clientes...
-//¿Debe encargarse de desconectarlos de todos los canales primero.
-//¿Deberia la clase client tener una función disconnect?
 void Server::disconnectClient(size_t& pollIndex)
 {
 	int clientfd = _pollfds[pollIndex].fd;
@@ -219,7 +216,7 @@ void Server::processData(std::string data, size_t& pollIndex)
 		std::string command = client->getCommandFromBuffer();
 		CommandParser::parseAndExecute(command, *this, *client);
 
-		//Después de ejecutar cada comando, revisar si el cliente debe desconectarse.
+		//After executing each command, check if the client must disconnect.
 		if (client->hasRequestedDisconnection())
 		{
 			disconnectClient(pollIndex);
@@ -232,8 +229,7 @@ void Server::sendReplyToClient(Client *client, int reply_number, const std::stri
 {
     std::stringstream ss;
     ss << ":ft_irc ";
-    
-    // Rellenar con ceros a la izquierda si tiene menos de 3 cifras
+
     if (reply_number < 10) ss << "00";
     else if (reply_number < 100) ss << "0";
     ss << reply_number << " ";
@@ -374,11 +370,18 @@ void Server::removeEmptyChannels()
 
 Channel *Server::createChannel(const std::string &name)
 {
-	_channels.insert(std::pair<std::string, Channel>(name, Channel(name)));
+	try
+	{
+		_channels.insert(std::pair<std::string, Channel>(name, Channel(name)));
+	}
+	catch(const std::exception& e)
+	{
+		return NULL;
+	}
+	
 	return getChannelByName(name);
 }
 
-//TODO: Envíar mensaje a cliente con algo parecido a "Connection closed by server"
 void Server::closeServer()
 {
 	for(size_t i = 0; i < _pollfds.size(); i++)
