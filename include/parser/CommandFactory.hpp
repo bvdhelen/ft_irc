@@ -7,7 +7,10 @@
 class CommandFactory
 {
 	public:
-		static Command *createCommand(std::string commandName, const std::vector<std::string> &params);
+		static Command *createCommand(
+			std::string commandName,
+			const std::vector<std::string> &params,
+			Client &client);
 };
 
 #endif
