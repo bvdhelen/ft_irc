@@ -9,7 +9,7 @@ class JoinCommand : public Command
 {
     private:
         std::vector<std::string> splitChannels(const std::string &channels);
-        void handleJoinChannel(Server &server, Client &client, Channel *channel, std::string channelName);
+        void handleJoinChannel(Server &server, Client &client, Channel *channel, const std::string& channelName);
     public:
         JoinCommand(const std::vector<std::string> &params);
         ~JoinCommand();

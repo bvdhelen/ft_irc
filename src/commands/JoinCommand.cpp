@@ -61,7 +61,7 @@ std::vector<std::string> JoinCommand::splitChannels(const std::string &channels)
     return result;
 }
 
-void JoinCommand::handleJoinChannel(Server &server, Client &client, Channel *channel, std::string channelName)
+void JoinCommand::handleJoinChannel(Server &server, Client &client, Channel *channel, const std::string& channelName)
 {
     if (channel == NULL)
     {
