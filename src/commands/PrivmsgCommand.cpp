@@ -1,4 +1,4 @@
-#include "PrivmsgCommand.hpp"
+#include "commands/PrivmsgCommand.hpp"
 
 PrivmsgCommand::PrivmsgCommand(const std::vector<std::string> &params)
 {
