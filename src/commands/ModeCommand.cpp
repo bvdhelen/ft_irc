@@ -1,7 +1,6 @@
 #include "commands/ModeCommand.hpp"
 #include "Channel.hpp"
 #include "Replies.hpp"
-#include <cstdlib>
 
 ModeCommand::ModeCommand(const std::vector<std::string> &params)
 {
@@ -32,40 +31,59 @@ void ModeCommand::applyModes(Channel *channel, Client &client, Server &server, c
 {
 	bool adding = true;
 	size_t paramIndex = 2;
+	std::string appliedModes;
+	std::string appliedParams;
 
 	for (size_t i = 0; i < modestring.size(); i++)
 	{
 		char c = modestring[i];
 		if (c == '+') { adding = true; continue; }
 		if (c == '-') { adding = false; continue; }
+		bool hasAppliedParams = false;
 
 		switch (c)
 		{
-			case 'i':
+			case 'i': // invite only
 				channel->setInviteOnly(adding);
+				appliedModes += (adding ? "+i" : "-i");
 				break;
-			case 't':
+			case 't': // topic is protected
 				channel->setProtectedTopic(adding);
+				appliedModes += (adding ? "+t" : "-t");
 				break;
-			case 'k':
-				if (adding && paramIndex < _params.size())
+			case 'k': // key (password)
+				if (adding)
 				{
-					channel->setPassword(_params[paramIndex]);
-					paramIndex++;
+					if (paramIndex < _params.size())
+					{
+						channel->setPassword(_params[paramIndex]);
+						appliedModes += "+k";
+						hasAppliedParams = true;
+					}
 				}
 				else
+				{
 					channel->removePassword();
+					appliedModes += "-k";
+				}
 				break;
-			case 'l':
-				if (adding && paramIndex < _params.size())
+			case 'l': // user limit
+				if (adding)
 				{
-					channel->setUserLimit(std::atoi(_params[paramIndex].c_str()));
-					paramIndex++;
+					if (paramIndex < _params.size())
+					{
+						channel->setUserLimit(std::atoi(_params[paramIndex].c_str()));
+						appliedModes += "+l";
+						hasAppliedParams = true;
+					}
 				}
 				else
+				{
 					channel->removeUserLimit();
+					appliedModes += "-l";
+				}
 				break;
-			case 'o':
+			case 'o': // make/quit operator
 			{
 				if (paramIndex < _params.size())
 				{
@@ -76,16 +94,31 @@ void ModeCommand::applyModes(Channel *channel, Client &client, Server &server, c
 							channel->addOperator(target);
 						else
 							channel->removeOperator(target);
+
+						appliedModes += (adding ? "+o" : "-o");
+						hasAppliedParams = true;
 					}
-					paramIndex++;
 				}
 				break;
 			}
 			default:
 			{
-				server.sendReplyToClient(&client, ERR_UNKNOWNMODE, ":is unknown mode char to me " + channel->getName(), std::string(&c));
+				server.sendReplyToClient(&client, ERR_UNKNOWNMODE, ":is an unknown mode char to me", std::string(&c));
 				break;
 			}
+
+			if (hasAppliedParams)
+			{
+				appliedParams += " " + _params[paramIndex];
+				paramIndex++;
+			}
 		}
+	}
+
+	if (!appliedModes.empty())
+	{
+		std::string msg = ":" + client.getNickname() + "!" + client.getUsername() + "@" + client.getHost()
+			+ " MODE " + channel->getName() + " " + appliedModes + appliedParams + "\r\n";
+		server.sendToChannelRaw(channel, msg);
 	}
 }
