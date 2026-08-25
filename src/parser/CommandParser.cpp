@@ -10,7 +10,7 @@ void CommandParser::parseAndExecute(std::string line, Server &server, Client &cl
 	std::vector<std::string> params;
 	parseParams(line, params);
 
-	Command *cmd = CommandFactory::createCommand(commandName, params);
+	Command *cmd = CommandFactory::createCommand(commandName, params, client);
 	if (!cmd)
 		return server.sendReplyToClient(&client, ERR_UNKNOWNCOMMAND, "Unknown command", commandName);
 	
