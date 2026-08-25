@@ -44,14 +44,14 @@ void ModeCommand::applyModes(Channel *channel, Client &client, Server &server, c
 		switch (c)
 		{
 			case 'i': // invite only
-				if (channel->isInviteOnly() == adding)
+				if (channel->isInviteOnly() != adding)
 				{
 					channel->setInviteOnly(adding);
 					appliedModes += (adding ? "+i" : "-i");
 				}
 				break;
 			case 't': // topic is protected
-				if (channel->isProtectedTopic() == adding)
+				if (channel->isProtectedTopic() != adding)
 				{
 					channel->setProtectedTopic(adding);
 					appliedModes += (adding ? "+t" : "-t");
