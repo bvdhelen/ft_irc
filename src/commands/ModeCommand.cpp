@@ -1,13 +1,13 @@
 #include "commands/ModeCommand.hpp"
-#include "Channel.hpp"
-#include "Replies.hpp"
 
 ModeCommand::ModeCommand(const std::vector<std::string> &params)
 {
 	_params = params;
 }
 
-ModeCommand::~ModeCommand() {}
+ModeCommand::~ModeCommand()
+{
+}
 
 void ModeCommand::execute(Server &server, Client &client)
 {
