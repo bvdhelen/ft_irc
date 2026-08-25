@@ -10,6 +10,7 @@
 #include "commands/InviteCommand.hpp"
 #include "commands/PrivmsgCommand.hpp"
 #include "commands/JoinCommand.hpp"
+#include "commands/ModeCommand.hpp"
 
 static void toUpper(std::string &s);
 
@@ -27,7 +28,7 @@ Command *CommandFactory::createCommand(std::string commandName, const std::vecto
 	if (commandName == "KICK")			return new KickCommand(params);
 	if (commandName == "TOPIC")			return new TopicCommand(params);
 	if (commandName == "INVITE")		return new InviteCommand(params);
-	// if (commandName == "MODE")		return new ModeCommand(params);
+	if (commandName == "MODE")			return new ModeCommand(params);
 	if (commandName == "PING")			return new PingCommand(params);
 	
 	return NULL; // default if no command is found
