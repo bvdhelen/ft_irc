@@ -23,7 +23,7 @@ void UserCommand::execute(Server &server, Client &client)
 	client.setUsername(_params[0]);
 	client.setHasUser(true);
 	client.setRealname(_params[3]);
-	if (client.getHasUser() && client.getHasNick())
+	if (client.getHasNick())
 	{
 		if (client.getPassOk())
 		{

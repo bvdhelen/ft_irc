@@ -1,5 +1,4 @@
 #include "commands/NickCommand.hpp"
-#include <cctype>
 
 NickCommand::NickCommand(const std::vector<std::string>& params)
 {
@@ -85,7 +84,7 @@ void NickCommand::execute(Server &server, Client &client)
 	{
 		client.setNickname(nick);
 		client.setHasNick(true);
-		if (client.getHasUser() && client.getHasNick())
+		if (client.getHasUser())
 		{
 			if (client.getPassOk())
 			{

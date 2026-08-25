@@ -1,8 +1,5 @@
 #include "Server.hpp"
 #include "parser/CommandParser.hpp"
-#include "commands/PassCommand.hpp"
-#include "commands/UserCommand.hpp"
-#include "commands/NickCommand.hpp"
 
 volatile sig_atomic_t Server::_isRunning = false;
 

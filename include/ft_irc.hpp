@@ -37,5 +37,6 @@
 #include <exception>
 #include <cerrno>
 #include <sstream>
+#include <cctype>
 
 #endif
