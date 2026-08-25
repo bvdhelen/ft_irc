@@ -112,13 +112,12 @@ void ModeCommand::applyModes(Channel *channel, Client &client, Server &server, c
 				server.sendReplyToClient(&client, ERR_UNKNOWNMODE, ":is an unknown mode char to me", std::string(&c));
 				break;
 			}
+		}
 
-			if (hasAppliedParams)
-			{
-				// ! TODO FIX no aparecen los parametros en las respuestas
-				appliedParams += " " + _params[paramIndex];
-				paramIndex++;
-			}
+		if (hasAppliedParams)
+		{
+			appliedParams += " " + _params[paramIndex];
+			paramIndex++;
 		}
 	}
 
