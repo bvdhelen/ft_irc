@@ -51,19 +51,22 @@ void TopicCommand::execute(Server &server, Client &client)
 
 void TopicCommand::sendCurrentTopic(Server &server, Client &client, Channel *channel)
 {
+    std::string message;
+
 	if (channel->getTopic().empty())
 	{
-		server.sendReplyToClient(
-			&client,
-			RPL_NOTOPIC,
-			"No topic is set");
+		message = ":ft_irc 331 "
+			+ client.getNickname() + " "
+			+ channel->getName()
+			+ " :No topic is set.\r\n";
+		server.sendReplyToClientRaw(&client, message);
 		return ;
 	}
-	server.sendReplyToClient(
-		&client,
-		RPL_TOPIC,
-		channel->getTopic(),
-		channel->getName());
+	message = ":ft_irc 332 "
+		+ client.getNickname() + " "
+		+ channel->getName()
+		+ " :" + channel->getTopic() + "\r\n";
+	server.sendReplyToClientRaw(&client, message);
 }
 
 void TopicCommand::setTopic(Server &server, Client &client, Channel *channel, const std::string &topic)
@@ -73,10 +76,11 @@ void TopicCommand::setTopic(Server &server, Client &client, Channel *channel, co
 	if (channel->isProtectedTopic()
 		&& !channel->isOperator(&client))
 	{
-		server.sendReplyToClient(
-			&client,
-			ERR_CHANOPRIVSNEEDED,
-			"You're not channel operator");
+		message = ":ft_irc 482 "
+			+ client.getNickname() + " "
+			+ channel->getName()
+			+ " :You're not a channel operator\r\n";
+		server.sendReplyToClientRaw(&client, message);
 		return ;
 	}
 	channel->setTopic(topic);
