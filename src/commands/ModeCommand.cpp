@@ -44,12 +44,18 @@ void ModeCommand::applyModes(Channel *channel, Client &client, Server &server, c
 		switch (c)
 		{
 			case 'i': // invite only
-				channel->setInviteOnly(adding);
-				appliedModes += (adding ? "+i" : "-i");
+				if (channel->isInviteOnly() == adding)
+				{
+					channel->setInviteOnly(adding);
+					appliedModes += (adding ? "+i" : "-i");
+				}
 				break;
 			case 't': // topic is protected
-				channel->setProtectedTopic(adding);
-				appliedModes += (adding ? "+t" : "-t");
+				if (channel->isProtectedTopic() == adding)
+				{
+					channel->setProtectedTopic(adding);
+					appliedModes += (adding ? "+t" : "-t");
+				}
 				break;
 			case 'k': // key (password)
 				if (adding)
@@ -61,7 +67,7 @@ void ModeCommand::applyModes(Channel *channel, Client &client, Server &server, c
 						hasAppliedParams = true;
 					}
 				}
-				else
+				else if (channel->hasPassword())
 				{
 					channel->removePassword();
 					appliedModes += "-k";
@@ -77,7 +83,7 @@ void ModeCommand::applyModes(Channel *channel, Client &client, Server &server, c
 						hasAppliedParams = true;
 					}
 				}
-				else
+				else if (channel->hasUserLimit())
 				{
 					channel->removeUserLimit();
 					appliedModes += "-l";
@@ -109,6 +115,7 @@ void ModeCommand::applyModes(Channel *channel, Client &client, Server &server, c
 
 			if (hasAppliedParams)
 			{
+				// ! TODO FIX no aparecen los parametros en las respuestas
 				appliedParams += " " + _params[paramIndex];
 				paramIndex++;
 			}
