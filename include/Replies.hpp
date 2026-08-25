@@ -3,62 +3,62 @@
 
 // ==================== REPLIES ====================
 
-// Registro inicial del cliente
-# define RPL_WELCOME        001 // Bienvenida al cliente
-# define RPL_YOURHOST       002 // Información sobre el servidor
-# define RPL_CREATED        003 // Fecha de creación del servidor
-# define RPL_MYINFO         004 // Información sobre el servidor y modos
+// Initial client registration
+# define RPL_WELCOME        001 // Client welcome
+# define RPL_YOURHOST       002 // Server information
+# define RPL_CREATED        003 // Server creation date
+# define RPL_MYINFO         004 // Server and mode information
 
 // Channel MODE
-# define RPL_CHANNELMODEIS  324 // Muestra los modos actuales del canal
+# define RPL_CHANNELMODEIS  324 // Displays current channel modes
 
 // TOPIC
-# define RPL_NOTOPIC        331 // El canal no tiene topic
-# define RPL_TOPIC          332 // Topic actual del canal
+# define RPL_NOTOPIC        331 // Channel has no topic
+# define RPL_TOPIC          332 // Current channel topic
 
 // INVITE
-# define RPL_INVITING       341 // Confirmación de INVITE
+# define RPL_INVITING       341 // INVITE confirmation
 
 // NAMES / JOIN
-# define RPL_NAMREPLY       353 // Lista de usuarios del canal
-# define RPL_ENDOFNAMES     366 // Fin de la lista de usuarios
+# define RPL_NAMREPLY       353 // List of channel users
+# define RPL_ENDOFNAMES     366 // End of user list
 
 // ====================== ERRORS ======================
 
-// Errores generales de comandos
-# define ERR_NOSUCHNICK         401 // El nickname indicado no existe
-# define ERR_NOSUCHCHANNEL      403 // El canal indicado no existe
-# define ERR_CANNOTSENDTOCHAN   404 // No se puede enviar al canal
-# define ERR_NORECIPIENT        411 // No se ha indicado destinatario
-# define ERR_NOTEXTTOSEND       412 // No se ha indicado texto
-# define ERR_UNKNOWNCOMMAND     421 // Comando desconocido
-# define ERR_NEEDMOREPARAMS     461 // Faltan parámetros para el comando
+// General command errors
+# define ERR_NOSUCHNICK         401 // The specified nickname does not exist
+# define ERR_NOSUCHCHANNEL      403 // The specified channel does not exist
+# define ERR_CANNOTSENDTOCHAN   404 // Cannot send to channel
+# define ERR_NORECIPIENT        411 // No recipient given
+# define ERR_NOTEXTTOSEND       412 // No text given
+# define ERR_UNKNOWNCOMMAND     421 // Unknown command
+# define ERR_NEEDMOREPARAMS     461 // Missing parameters for the command
 
 // NICK
-# define ERR_NONICKNAMEGIVEN    431 // No se ha proporcionado nickname
-# define ERR_ERRONEUSNICKNAME   432 // Nickname inválido
-# define ERR_NICKNAMEINUSE      433 // Nickname ya está en uso
-# define ERR_NICKCOLLISION      436 // Colisión de nicknames
-# define ERR_UNAVAILRESOURCE    437 // Recurso no disponible
-# define ERR_RESTRICTED         484 // Nickname/conexión restringida
+# define ERR_NONICKNAMEGIVEN    431 // No nickname provided
+# define ERR_ERRONEUSNICKNAME   432 // Invalid nickname
+# define ERR_NICKNAMEINUSE      433 // Nickname already in use
+# define ERR_NICKCOLLISION      436 // Nickname collision
+# define ERR_UNAVAILRESOURCE    437 // Resource unavailable
+# define ERR_RESTRICTED         484 // Nickname/connection restricted
 
 // CHANNEL / USER
-# define ERR_USERNOTINCHANNEL   441 // El usuario no está en el canal
-# define ERR_NOTONCHANNEL       442 // El cliente no está en el canal
-# define ERR_USERONCHANNEL      443 // El usuario ya está en el canal
-# define ERR_NOTREGISTERED      451 // El cliente todavía no está registrado
-# define ERR_ALREADYREGISTERED  462 // El cliente ya está registrado
+# define ERR_USERNOTINCHANNEL   441 // User is not in the channel
+# define ERR_NOTONCHANNEL       442 // Client is not on the channel
+# define ERR_USERONCHANNEL      443 // User is already on the channel
+# define ERR_NOTREGISTERED      451 // Client is not yet registered
+# define ERR_ALREADYREGISTERED  462 // Client is already registered
 
 // PASS / OPER
-# define ERR_PASSWDMISMATCH     464 // La contraseña no coincide
-# define ERR_NOOPERHOST         491 // El host no puede utilizar OPER
+# define ERR_PASSWDMISMATCH     464 // Password does not match
+# define ERR_NOOPERHOST         491 // Host cannot use OPER
 
 // CHANNEL MODE / JOIN
-# define ERR_UNKNOWNMODE        472 // Modo de canal desconocido
-# define ERR_CHANNELISFULL      471 // El canal está lleno
-# define ERR_INVITEONLYCHAN     473 // El canal es solo para invitados
-# define ERR_BADCHANNELKEY      475 // Contraseña del canal incorrecta
-# define ERR_BADCHANMASK        476 // Máscara/nombre de canal incorrecto
-# define ERR_CHANOPRIVSNEEDED   482 // Se necesitan privilegios de operador
+# define ERR_UNKNOWNMODE        472 // Unknown channel mode
+# define ERR_CHANNELISFULL      471 // Channel is full
+# define ERR_INVITEONLYCHAN     473 // Channel is invite-only
+# define ERR_BADCHANNELKEY      475 // Incorrect channel password
+# define ERR_BADCHANMASK        476 // Incorrect channel mask/name
+# define ERR_CHANOPRIVSNEEDED   482 // Operator privileges required
 
 #endif

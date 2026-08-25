@@ -9,6 +9,37 @@ PartCommand::~PartCommand()
 {
 }
 
+void PartCommand::execute(Server &server, Client &client)
+{
+    std::vector<std::string> channels;
+    std::vector<std::string>::iterator it;
+
+    if (_params.empty())
+    {
+        server.sendReplyToClient(
+            &client,
+            ERR_NEEDMOREPARAMS,
+            "Not enough parameters",
+            "PART");
+        return ;
+    }
+    channels = splitChannels(_params[0]);
+    if (channels.empty())
+    {
+        server.sendReplyToClient(
+            &client,
+            ERR_NOSUCHCHANNEL,
+            "No such channel");
+        return ;
+    }
+    it = channels.begin();
+    while (it != channels.end())
+    {
+        partChannel(server, client, *it);
+        ++it;
+    }
+}
+
 std::vector<std::string> PartCommand::splitChannels(const std::string &channels)
 {
     std::string::size_type start;
@@ -70,36 +101,5 @@ void PartCommand::partChannel(Server &server, Client &client, const std::string 
         client.removeChannel(channel);
         if (channel->isEmpty())
             server.removeChannel(channel->getName());
-    }
-}
-
-void PartCommand::execute(Server &server, Client &client)
-{
-    std::vector<std::string> channels;
-    std::vector<std::string>::iterator it;
-
-    if (_params.empty())
-    {
-        server.sendReplyToClient(
-            &client,
-            ERR_NEEDMOREPARAMS,
-            "Not enough parameters",
-            "PART");
-        return ;
-    }
-    channels = splitChannels(_params[0]);
-    if (channels.empty())
-    {
-        server.sendReplyToClient(
-            &client,
-            ERR_NOSUCHCHANNEL,
-            "No such channel");
-        return ;
-    }
-    it = channels.begin();
-    while (it != channels.end())
-    {
-        partChannel(server, client, *it);
-        ++it;
     }
 }

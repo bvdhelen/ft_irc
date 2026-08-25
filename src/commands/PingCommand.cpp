@@ -5,7 +5,9 @@ PingCommand::PingCommand(const std::vector<std::string>& params)
 	_params = params;
 }
 
-PingCommand::~PingCommand() {}
+PingCommand::~PingCommand()
+{
+}
 
 void PingCommand::execute(Server& server, Client &client)
 {

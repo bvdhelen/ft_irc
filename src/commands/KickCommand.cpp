@@ -9,6 +9,20 @@ KickCommand::~KickCommand(void)
 {
 }
 
+void KickCommand::execute(Server &server, Client &client)
+{
+    if (_params.size() < 2)
+	{
+		server.sendReplyToClient(
+			&client,
+			ERR_NEEDMOREPARAMS,
+			"Not enough parameters",
+			"KICK");
+		return ;
+	}
+	kickClient(server, client, _params[0], _params[1]);
+}
+
 void KickCommand::kickClient(Server &server, Client &client, const std::string &channelName, const std::string &nickname)
 {
 	Channel *channel;
@@ -69,18 +83,4 @@ void KickCommand::kickClient(Server &server, Client &client, const std::string &
 	target->removeChannel(channel);
     if (channel->isEmpty())
         server.removeChannel(channel->getName());
-}
-
-void KickCommand::execute(Server &server, Client &client)
-{
-    if (_params.size() < 2)
-	{
-		server.sendReplyToClient(
-			&client,
-			ERR_NEEDMOREPARAMS,
-			"Not enough parameters",
-			"KICK");
-		return ;
-	}
-	kickClient(server, client, _params[0], _params[1]);
 }

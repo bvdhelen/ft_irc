@@ -6,10 +6,10 @@
 class PingCommand : public Command
 {
 	public:
-		PingCommand(const std::vector<std::string>& params);
+		PingCommand(const std::vector<std::string> &params);
 		~PingCommand();
 
-		void execute(Server& server, Client& client);
+		void execute(Server &server, Client &client);
 };
 
 #endif

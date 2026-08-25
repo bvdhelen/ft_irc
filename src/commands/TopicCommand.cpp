@@ -9,44 +9,6 @@ TopicCommand::~TopicCommand(void)
 {
 }
 
-void TopicCommand::sendCurrentTopic(Server &server, Client &client, Channel *channel)
-{
-	if (channel->getTopic().empty())
-	{
-		server.sendReplyToClient(
-			&client,
-			RPL_NOTOPIC,
-			"No topic is set");
-		return ;
-	}
-	server.sendReplyToClient(
-		&client,
-		RPL_TOPIC,
-		channel->getTopic(),
-		channel->getName());
-}
-
-void TopicCommand::setTopic(Server &server, Client &client, Channel *channel, const std::string &topic)
-{
-	std::string message;
-
-	if (channel->isProtectedTopic()
-		&& !channel->isOperator(&client))
-	{
-		server.sendReplyToClient(
-			&client,
-			ERR_CHANOPRIVSNEEDED,
-			"You're not channel operator");
-		return ;
-	}
-	channel->setTopic(topic);
-	message = ":" + client.getNickname() + "!"
-		+ client.getUsername() + "@"
-    	+ client.getHost() + " TOPIC "
-		+ channel->getName() + " :" + topic + "\r\n";
-	server.sendToChannelRaw(channel, message);
-}
-
 void TopicCommand::execute(Server &server, Client &client)
 {
 	Channel *channel;
@@ -85,4 +47,42 @@ void TopicCommand::execute(Server &server, Client &client)
 		return ;
 	}
 	setTopic(server, client, channel, _params[1]);
+}
+
+void TopicCommand::sendCurrentTopic(Server &server, Client &client, Channel *channel)
+{
+	if (channel->getTopic().empty())
+	{
+		server.sendReplyToClient(
+			&client,
+			RPL_NOTOPIC,
+			"No topic is set");
+		return ;
+	}
+	server.sendReplyToClient(
+		&client,
+		RPL_TOPIC,
+		channel->getTopic(),
+		channel->getName());
+}
+
+void TopicCommand::setTopic(Server &server, Client &client, Channel *channel, const std::string &topic)
+{
+	std::string message;
+
+	if (channel->isProtectedTopic()
+		&& !channel->isOperator(&client))
+	{
+		server.sendReplyToClient(
+			&client,
+			ERR_CHANOPRIVSNEEDED,
+			"You're not channel operator");
+		return ;
+	}
+	channel->setTopic(topic);
+	message = ":" + client.getNickname() + "!"
+		+ client.getUsername() + "@"
+    	+ client.getHost() + " TOPIC "
+		+ channel->getName() + " :" + topic + "\r\n";
+	server.sendToChannelRaw(channel, message);
 }

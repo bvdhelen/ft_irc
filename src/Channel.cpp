@@ -58,14 +58,12 @@ bool Channel::hasClient(Client *client) const
 	return _clients.find(client) != _clients.end();
 }
 
-// para que el server se pueda enterar de que tiene que borrar el canal (cuando se va el ultimo cliente)
 bool Channel::isEmpty() const
 {
 	return _clients.empty();
 }
 
 // Operators
-// el comando tiene que comprobar que el cliente este en el canal
 void Channel::addOperator(Client *client)
 {
 	_operators.insert(client);
@@ -103,7 +101,7 @@ void Channel::setTopic(const std::string &topic)
 	_topic = topic;
 }
 
-// Modes - invite only
+// Mode - invite only
 void Channel::setInviteOnly(bool value)
 {
 	_inviteOnly = value;
@@ -114,7 +112,7 @@ bool Channel::isInviteOnly() const
 	return _inviteOnly;
 }
 
-// Modes - protected topic
+// Mode - protected topic
 void Channel::setProtectedTopic(bool value)
 {
 	_protectedTopic = value;
@@ -125,7 +123,7 @@ bool Channel::isProtectedTopic() const
 	return _protectedTopic;
 }
 
-// mode - password
+// Mode - password
 void Channel::setPassword(const std::string &password)
 {
 	_password = password;
@@ -141,14 +139,12 @@ bool Channel::hasPassword() const
 	return !_password.empty();
 }
 
-// el comando se encarga de comprobar si el canal tiene o no contraseña
 bool Channel::checkPassword(const std::string &password) const
 {
 	return _password == password;
 }
 
-// mode - user limit
-// si un canal no tenia limite y le ponen un limite menor al numero de clientes que tiene conserva a los clientes
+// Mode - user limit
 void Channel::setUserLimit(size_t limit)
 {
 	_userLimit = limit;
@@ -164,13 +160,12 @@ bool Channel::hasUserLimit() const
 	return _userLimit != 0;
 }
 
-// el canal puede tener más clientes del limite si ya estaban ahi antes de ponerlo
 bool Channel::isFull() const
 {
 	return hasUserLimit() && _clients.size() >= _userLimit;
 }
 
-// exception
+// Exception
 const char *Channel::NameTooLongException::what() const throw()
 {
 	return "Channel name cannot exceed 50 characters";
