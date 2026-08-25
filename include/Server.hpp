@@ -53,7 +53,7 @@ class Server
 		Channel *getChannelByName(const std::string &name);
 		void removeChannel(const std::string &name);
 		void removeEmptyChannels();
-		Channel *createChannel(const std::string &name);
+		Channel *createChannel(const std::string &name, const std::string& password = "");
 
 		// Exceptions
 		class SocketFileDescriptorException : public std::exception
