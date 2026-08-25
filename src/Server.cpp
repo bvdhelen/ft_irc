@@ -186,11 +186,25 @@ void Server::disconnectClient(size_t& pollIndex)
 	Client* client = getClientBySocket(clientfd);
 	if (client == NULL)
         return;
+	std::string quitMsg = ":" + client->getNickname() + "!"
+		+ client->getUsername() + "@"
+		+ client->getHost() + " QUIT";
+	if (!client->getQuitMessage().empty())
+		quitMsg += " :" + client->getQuitMessage();
+	else
+		quitMsg += " :Connection closed";
+	quitMsg += "\r\n";
+	const std::set<Channel*>& channels = client->getChannels();
+	std::set<Channel*>::const_iterator it = channels.begin();
+	while (it != channels.end())
+	{
+		sendToChannelExceptRaw(*it, client, quitMsg);
+		++it;
+	}
 	client->disconnect();
     removeEmptyChannels();
 	close(clientfd);
 	std::cout << "A client disconected." << std::endl;
-	//Erase from Server data structures.
 	_clients.erase(clientfd);
 	_pollfds.erase(_pollfds.begin() + pollIndex);
 	pollIndex--;
@@ -356,6 +370,12 @@ void Server::removeEmptyChannels()
         else
             ++it;
     }
+}
+
+Channel *Server::createChannel(const std::string &name)
+{
+	_channels.insert(std::pair<std::string, Channel>(name, Channel(name)));
+	return getChannelByName(name);
 }
 
 //TODO: Envíar mensaje a cliente con algo parecido a "Connection closed by server"

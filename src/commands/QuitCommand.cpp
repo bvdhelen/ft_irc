@@ -11,20 +11,8 @@ QuitCommand::~QuitCommand()
 
 void QuitCommand::execute(Server &server, Client &client)
 {
-    std::string message;
-    std::set<Channel *>::const_iterator it;
-
-    message = ":" + client.getNickname() + "!"
-        + client.getUsername() + "@"
-        + client.getHost() + " QUIT";
     if (!_params.empty())
-        message += " :" + _params[0];
-    message += "\r\n";
-    it = client.getChannels().begin();
-    while (it != client.getChannels().end())
-    {
-        server.sendToChannelExceptRaw(*it, &client, message);
-        ++it;
-    }
+        client.setQuitMessage(_params[0]);
     client.setRequestedDisconnection(true);
+    (void)server;
 }
