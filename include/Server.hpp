@@ -13,7 +13,7 @@ class Server
 		int _port;
 		std::string _password;
 		static volatile sig_atomic_t _isRunning;
-	
+
 		//Conocer los clientes
 		std::map<int, Client> _clients;
 

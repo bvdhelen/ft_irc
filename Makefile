@@ -3,7 +3,7 @@ NAME = ircserv
 
 # Compilador y banderas de compilación
 CXX = c++
-CXXFLAGS = -Wall -Werror -Wextra -std=c++98
+CXXFLAGS = -Wall -Werror -Wextra -std=c++98 -g3
 INCLUDES = -Iinclude
 
 # Carpeta para objetos
@@ -32,6 +32,9 @@ SRCS =  src/main.cpp \
 		src/commands/PartCommand.cpp \
 		src/commands/QuitCommand.cpp \
 		src/commands/PingCommand.cpp \
+		src/commands/PassCommand.cpp \
+		src/commands/NickCommand.cpp \
+		src/commands/UserCommand.cpp \
 		src/commands/TopicCommand.cpp \
 		src/commands/KickCommand.cpp \
 		src/commands/InviteCommand.cpp \

@@ -1,7 +1,6 @@
 #include "Server.hpp"
 #include "parser/CommandParser.hpp"
 
-
 volatile sig_atomic_t Server::_isRunning = false;
 
 //Lo siento Izhan, los signal handlers van siempre arriba.
@@ -205,7 +204,6 @@ void Server::processData(std::string data, size_t& pollIndex)
 	{
 		std::string command = client->getCommandFromBuffer();
 		CommandParser::parseAndExecute(command, *this, *client);
-
 
 		//Después de ejecutar cada comando, revisar si el cliente debe desconectarse.
 		if (client->hasRequestedDisconnection())
